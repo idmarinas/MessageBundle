@@ -1,19 +1,27 @@
 {
-    "name": "friendsofsymfony/message-bundle",
+    "name": "idmarinas/message-bundle",
     "type": "symfony-bundle",
-    "description": "Provides user-to-user messaging features for your Symfony application.",
+    "description": "Provides user-to-user messaging features for your Symfony application. Forked of FOSMessageBundle",
     "keywords": ["symfony", "message", "messaging"],
-    "homepage": "https://github.com/FriendsOfSymfony/FOSMessageBundle",
+    "homepage": "https://github.com/idmarinas/MessageBundle",
     "license": "MIT",
     "authors": [
         {
             "name": "Thibault Duplessis",
             "email": "thibault.duplessis@gmail.com",
-            "homepage": "http://ornicar.github.com"
+            "homepage": "http://ornicar.github.com",
+            "role": "Original Creator"
         },
         {
             "name": "FriendsOfSymfony Community",
-            "homepage": "https://github.com/friendsofsymfony/FOSMessageBundle/contributors"
+            "homepage": "https://github.com/friendsofsymfony/FOSMessageBundle/contributors",
+            "role": "Contributors of original"
+        },
+        {
+            "name": "Iván Diaz Marinas (IDMarinas)",
+            "email": "35842929+idmarinas@users.noreply.github.com",
+            "homepage": "https://github.com/idmarinas/message-bundle",
+            "role": "Maintainer of idmarinas/message-bundle Fork"
         }
     ],
     "require": {
