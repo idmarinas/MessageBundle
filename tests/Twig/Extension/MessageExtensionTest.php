@@ -63,15 +63,8 @@ class MessageExtensionTest extends TestCase
         $this->assertTrue($this->extension->isThreadDeletedByParticipant($thread));
     }
 
-    public function testGetNbUnreadCacheStartsEmpty()
-    {
-        $this->assertAttributeEmpty('nbUnreadMessagesCache', $this->extension);
-        $this->extension->getNbUnread();
-    }
-
     public function testGetNbUnread()
     {
-        $this->assertAttributeEmpty('nbUnreadMessagesCache', $this->extension);
         $this->provider->expects($this->once())->method('getNbUnreadMessages')->will($this->returnValue(3));
         $this->assertEquals(3, $this->extension->getNbUnread());
     }
