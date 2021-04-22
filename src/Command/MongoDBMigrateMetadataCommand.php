@@ -118,7 +118,7 @@ EOT
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->migrateMessages($output);
         $this->migrateThreads($output);
@@ -126,6 +126,7 @@ EOT
         $size = memory_get_peak_usage(true);
         $unit = array('b', 'k', 'm', 'g', 't', 'p');
         $output->writeln(sprintf('Peak Memory Usage: <comment>%s</comment>', round($size / pow(1024, $i = floor(log($size, 1024))), 2).$unit[$i]));
+        return 0;
     }
 
     /**
