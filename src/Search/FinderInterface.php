@@ -14,7 +14,6 @@ interface FinderInterface
     /**
      * Finds threads of a participant, matching a given query.
      *
-     * @param Query $query
      *
      * @return ThreadInterface[]
      */
@@ -23,7 +22,6 @@ interface FinderInterface
     /**
      * Finds threads of a participant, matching a given query.
      *
-     * @param Query $query
      *
      * @return Builder a query builder suitable for pagination
      */

@@ -37,7 +37,6 @@ class MessageManager extends BaseMessageManager
     protected $metaClass;
 
     /**
-     * @param EntityManager $em
      * @param string        $class
      * @param string        $metaClass
      */
@@ -94,8 +93,6 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks all messages of this thread as read by this participant.
      *
-     * @param ThreadInterface      $thread
-     * @param ParticipantInterface $participant
      * @param bool                 $isRead
      */
     public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead)
@@ -108,8 +105,6 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks the message as read or unread by this participant.
      *
-     * @param MessageInterface     $message
-     * @param ParticipantInterface $participant
      * @param bool                 $isRead
      */
     protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)

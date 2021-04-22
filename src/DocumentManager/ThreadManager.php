@@ -50,7 +50,6 @@ class ThreadManager extends BaseThreadManager
      * @param DocumentManager $dm
      * @param string          $class
      * @param string          $metaClass
-     * @param MessageManager  $messageManager
      */
     public function __construct(DocumentManager $dm, $class, $metaClass, MessageManager $messageManager)
     {
@@ -234,11 +233,8 @@ class ThreadManager extends BaseThreadManager
      *
      * All following methods are relative to denormalization
      */
-
     /**
      * Performs denormalization tricks.
-     *
-     * @param Thread $thread
      */
     protected function denormalize(Thread $thread)
     {
@@ -264,8 +260,6 @@ class ThreadManager extends BaseThreadManager
     /**
      * Ensures that metadata exists for each thread participant and that the
      * last message dates are current.
-     *
-     * @param Thread $thread
      */
     protected function doEnsureThreadMetadataExists(Thread $thread)
     {

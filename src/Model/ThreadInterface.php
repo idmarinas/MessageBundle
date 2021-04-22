@@ -87,7 +87,6 @@ interface ThreadInterface extends ReadableInterface
     /**
      * Tells if the user participates to the conversation.
      *
-     * @param ParticipantInterface $participant
      *
      * @return bool
      */
@@ -109,7 +108,6 @@ interface ThreadInterface extends ReadableInterface
     /**
      * Sets whether or not this participant has deleted this thread.
      *
-     * @param ParticipantInterface $participant
      * @param bool                 $isDeleted
      */
     public function setIsDeletedByParticipant(ParticipantInterface $participant, $isDeleted);
@@ -124,7 +122,6 @@ interface ThreadInterface extends ReadableInterface
     /**
      * Get the participants this participant is talking with.
      *
-     * @param ParticipantInterface $participant
      *
      * @return ParticipantInterface[]
      */

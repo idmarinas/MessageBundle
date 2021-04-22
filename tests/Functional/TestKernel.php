@@ -31,14 +31,12 @@ class TestKernel extends Kernel
      */
     public function registerBundles()
     {
-        $bundles = array(
+        return array(
             new FrameworkBundle(),
             new SecurityBundle(),
             new TwigBundle(),
             new FOSMessageBundle(),
         );
-
-        return $bundles;
     }
 
     /**
@@ -62,7 +60,7 @@ class TestKernel extends Kernel
 
         $c->loadFromExtension('security', array(
             'providers' => array('permissive' => array('id' => 'app.user_provider')),
-            'encoders' => array('FOS\MessageBundle\Tests\Functional\Entity\User' => 'plaintext'),
+            'encoders' => array(\FOS\MessageBundle\Tests\Functional\Entity\User::class => 'plaintext'),
             'firewalls' => array('main' => array('http_basic' => true)),
         ));
 

@@ -82,8 +82,6 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks all messages of this thread as read by this participant.
      *
-     * @param ThreadInterface      $thread
-     * @param ParticipantInterface $participant
      * @param bool                 $isRead
      */
     public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead)
@@ -96,8 +94,6 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks the message as read or unread by this participant.
      *
-     * @param MessageInterface     $message
-     * @param ParticipantInterface $participant
      * @param bool                 $isRead
      */
     protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)
@@ -111,9 +107,7 @@ class MessageManager extends BaseMessageManager
      * Marks messages as read/unread
      * by updating directly the storage.
      *
-     * @param ParticipantInterface $participant
      * @param bool                 $isRead
-     * @param \Closure             $condition
      */
     protected function markIsReadByCondition(ParticipantInterface $participant, $isRead, \Closure $condition)
     {
@@ -187,11 +181,8 @@ class MessageManager extends BaseMessageManager
      *
      * All following methods are relative to denormalization
      */
-
     /**
      * Performs denormalization tricks.
-     *
-     * @param Message $message
      */
     public function denormalize(Message $message)
     {
@@ -201,8 +192,6 @@ class MessageManager extends BaseMessageManager
 
     /**
      * Ensures that the message has metadata for each thread participant.
-     *
-     * @param Message $message
      */
     protected function doEnsureMessageMetadataExists(Message $message)
     {

@@ -22,7 +22,6 @@ class AuthorizationValidator extends ConstraintValidator
      * Indicates whether the constraint is valid.
      *
      * @param object     $recipient
-     * @param Constraint $constraint
      */
     public function validate($recipient, Constraint $constraint)
     {

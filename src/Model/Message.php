@@ -139,8 +139,6 @@ abstract class Message implements MessageInterface
 
     /**
      * Adds MessageMetadata to the metadata collection.
-     *
-     * @param MessageMetadata $meta
      */
     public function addMetadata(MessageMetadata $meta)
     {
@@ -150,7 +148,6 @@ abstract class Message implements MessageInterface
     /**
      * Get the MessageMetadata for a participant.
      *
-     * @param ParticipantInterface $participant
      *
      * @return MessageMetadata
      */

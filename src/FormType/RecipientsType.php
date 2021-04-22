@@ -21,9 +21,6 @@ class RecipientsType extends AbstractType
      */
     private $recipientsTransformer;
 
-    /**
-     * @param RecipientsDataTransformer $transformer
-     */
     public function __construct(RecipientsDataTransformer $transformer)
     {
         $this->recipientsTransformer = $transformer;
@@ -65,7 +62,7 @@ class RecipientsType extends AbstractType
      */
     public function getParent()
     {
-        return LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextType');
+        return LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextType::class);
     }
 
     /**

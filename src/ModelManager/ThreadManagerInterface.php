@@ -28,7 +28,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * ordered by last message not written by this participant in reverse order.
      * In one word: an inbox.
      *
-     * @param ParticipantInterface $participant
      *
      * @return Builder a query builder suitable for pagination
      */
@@ -40,7 +39,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * ordered by last message not written by this participant in reverse order.
      * In one word: an inbox.
      *
-     * @param ParticipantInterface $participant
      *
      * @return ThreadInterface[]
      */
@@ -52,7 +50,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * ordered by last message written by this participant in reverse order.
      * In one word: an sentbox.
      *
-     * @param ParticipantInterface $participant
      *
      * @return Builder a query builder suitable for pagination
      */
@@ -64,7 +61,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * ordered by last message written by this participant in reverse order.
      * In one word: an sentbox.
      *
-     * @param ParticipantInterface $participant
      *
      * @return ThreadInterface[]
      */
@@ -74,7 +70,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * Finds deleted threads from a participant,
      * ordered by last message date.
      *
-     * @param ParticipantInterface $participant
      *
      * @return Builder a query builder suitable for pagination
      */
@@ -84,7 +79,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * Finds deleted threads from a participant,
      * ordered by last message date.
      *
-     * @param ParticipantInterface $participant
      *
      * @return ThreadInterface[]
      */
@@ -95,9 +89,7 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * matching the given search term
      * ordered by last message not written by this participant in reverse order.
      *
-     * @param ParticipantInterface $participant
      * @param string               $search
-     *
      * @return Builder a query builder suitable for pagination
      */
     public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search);
@@ -107,9 +99,7 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * matching the given search term
      * ordered by last message not written by this participant in reverse order.
      *
-     * @param ParticipantInterface $participant
      * @param string               $search
-     *
      * @return ThreadInterface[]
      */
     public function findParticipantThreadsBySearch(ParticipantInterface $participant, $search);
@@ -117,7 +107,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
     /**
      * Gets threads created by a participant.
      *
-     * @param ParticipantInterface $participant
      *
      * @return ThreadInterface[]
      */
@@ -133,7 +122,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
     /**
      * Saves a thread.
      *
-     * @param ThreadInterface $thread
      * @param bool            $andFlush Whether to flush the changes (default true)
      */
     public function saveThread(ThreadInterface $thread, $andFlush = true);

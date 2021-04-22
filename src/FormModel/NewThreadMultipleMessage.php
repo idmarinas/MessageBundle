@@ -55,8 +55,6 @@ class NewThreadMultipleMessage extends AbstractMessage
 
     /**
      * Adds single recipient to collection.
-     *
-     * @param ParticipantInterface $recipient
      */
     public function addRecipient(ParticipantInterface $recipient)
     {
@@ -67,8 +65,6 @@ class NewThreadMultipleMessage extends AbstractMessage
 
     /**
      * Removes recipient from collection.
-     *
-     * @param ParticipantInterface $recipient
      */
     public function removeRecipient(ParticipantInterface $recipient)
     {

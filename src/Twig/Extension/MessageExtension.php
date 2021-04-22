@@ -52,7 +52,6 @@ class MessageExtension extends AbstractExtension
     /**
      * Checks if the participant can mark a thread as deleted.
      *
-     * @param ThreadInterface $thread
      *
      * @return bool true if participant can mark a thread as deleted, false otherwise
      */
@@ -64,7 +63,6 @@ class MessageExtension extends AbstractExtension
     /**
      * Checks if the participant has marked the thread as deleted.
      *
-     * @param ThreadInterface $thread
      *
      * @return bool true if participant has marked the thread as deleted, false otherwise
      */

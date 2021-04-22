@@ -27,8 +27,6 @@ class NewThreadMessageBuilder extends AbstractMessageBuilder
     }
 
     /**
-     * @param ParticipantInterface $recipient
-     *
      * @return NewThreadMessageBuilder (fluent interface)
      */
     public function addRecipient(ParticipantInterface $recipient)
@@ -39,8 +37,6 @@ class NewThreadMessageBuilder extends AbstractMessageBuilder
     }
 
     /**
-     * @param Collection $recipients
-     *
      * @return NewThreadMessageBuilder
      */
     public function addRecipients(Collection $recipients)

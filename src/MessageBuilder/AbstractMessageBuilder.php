@@ -59,8 +59,6 @@ abstract class AbstractMessageBuilder
     }
 
     /**
-     * @param ParticipantInterface $sender
-     *
      * @return AbstractMessageBuilder (fluent interface)
      */
     public function setSender(ParticipantInterface $sender)

@@ -16,7 +16,6 @@ interface AuthorizerInterface
      * Tells if the current user is allowed
      * to see this thread.
      *
-     * @param ThreadInterface $thread
      *
      * @return bool
      */
@@ -26,7 +25,6 @@ interface AuthorizerInterface
      * Tells if the current participant is allowed
      * to delete this thread.
      *
-     * @param ThreadInterface $thread
      *
      * @return bool
      */

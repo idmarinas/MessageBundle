@@ -48,10 +48,8 @@ class ThreadManager extends BaseThreadManager
     protected $messageManager;
 
     /**
-     * @param EntityManager  $em
      * @param string         $class
      * @param string         $metaClass
-     * @param MessageManager $messageManager
      */
     public function __construct(EntityManager $em, $class, $metaClass, MessageManager $messageManager)
     {

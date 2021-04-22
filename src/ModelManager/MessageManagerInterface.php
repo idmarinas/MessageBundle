@@ -18,7 +18,6 @@ interface MessageManagerInterface extends ReadableManagerInterface
     /**
      * Tells how many unread, non-spam, messages this participant has.
      *
-     * @param ParticipantInterface $participant
      *
      * @return int the number of unread messages
      */
@@ -34,7 +33,6 @@ interface MessageManagerInterface extends ReadableManagerInterface
     /**
      * Saves a message.
      *
-     * @param MessageInterface $message
      * @param bool             $andFlush Whether to flush the changes (default true)
      */
     public function saveMessage(MessageInterface $message, $andFlush = true);

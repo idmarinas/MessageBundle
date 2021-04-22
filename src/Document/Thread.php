@@ -64,8 +64,6 @@ abstract class Thread extends AbstractThread
     /**
      * Adds a participant to the thread
      * If it already exists, nothing is done.
-     *
-     * @param ParticipantInterface $participant
      */
     public function addParticipant(ParticipantInterface $participant)
     {
@@ -77,7 +75,6 @@ abstract class Thread extends AbstractThread
     /**
      * Tells if the user participates to the conversation.
      *
-     * @param ParticipantInterface $participant
      *
      * @return bool
      */

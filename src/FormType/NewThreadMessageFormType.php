@@ -22,11 +22,11 @@ class NewThreadMessageFormType extends AbstractType
                 'label' => 'recipient',
                 'translation_domain' => 'FOSMessageBundle',
             ))
-            ->add('subject', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextType'), array(
+            ->add('subject', LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextType::class), array(
                 'label' => 'subject',
                 'translation_domain' => 'FOSMessageBundle',
             ))
-            ->add('body', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextareaType'), array(
+            ->add('body', LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextareaType::class), array(
                 'label' => 'body',
                 'translation_domain' => 'FOSMessageBundle',
             ));

@@ -16,15 +16,15 @@ class NewThreadMultipleMessageFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('recipients', LegacyFormHelper::getType('FOS\MessageBundle\FormType\RecipientsType'), array(
+            ->add('recipients', LegacyFormHelper::getType(\FOS\MessageBundle\FormType\RecipientsType::class), array(
                 'label' => 'recipients',
                 'translation_domain' => 'FOSMessageBundle',
             ))
-            ->add('subject', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextType'), array(
+            ->add('subject', LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextType::class), array(
                 'label' => 'subject',
                 'translation_domain' => 'FOSMessageBundle',
             ))
-            ->add('body', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextareaType'), array(
+            ->add('body', LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextareaType::class), array(
                 'label' => 'body',
                 'translation_domain' => 'FOSMessageBundle',
             ));

@@ -125,7 +125,7 @@ EOT
 
         $size = memory_get_peak_usage(true);
         $unit = array('b', 'k', 'm', 'g', 't', 'p');
-        $output->writeln(sprintf('Peak Memory Usage: <comment>%s</comment>', round($size / pow(1024, $i = floor(log($size, 1024))), 2).$unit[$i]));
+        $output->writeln(sprintf('Peak Memory Usage: <comment>%s</comment>', round($size / 1024 ** ($i = floor(log($size, 1024))), 2).$unit[$i]));
         return 0;
     }
 
@@ -317,6 +317,7 @@ EOT
      */
     private function createThreadLastMessageDate(array &$thread)
     {
+        $lastMessage = [];
         $lastMessageRef = end($thread['messages']);
 
         if (false !== $lastMessageRef) {
@@ -326,15 +327,13 @@ EOT
             );
         }
 
-        $thread['lastMessageDate'] = isset($lastMessage['createdAt']) ? $lastMessage['createdAt'] : null;
+        $thread['lastMessageDate'] = $lastMessage['createdAt'] ?? null;
     }
 
     /**
      * Sets the active participant arrays on the thread.
      *
      * @see Thread::doEnsureActiveParticipantArrays()
-     *
-     * @param array $thread
      */
     private function createThreadActiveParticipantArrays(array &$thread)
     {

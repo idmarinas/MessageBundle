@@ -249,8 +249,6 @@ abstract class Thread implements ThreadInterface
 
     /**
      * Adds ThreadMetadata to the metadata collection.
-     *
-     * @param ThreadMetadata $meta
      */
     public function addMetadata(ThreadMetadata $meta)
     {
@@ -260,7 +258,6 @@ abstract class Thread implements ThreadInterface
     /**
      * Gets the ThreadMetadata for a participant.
      *
-     * @param ParticipantInterface $participant
      *
      * @return ThreadMetadata
      */

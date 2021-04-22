@@ -25,7 +25,7 @@ class ParticipantProvider implements ParticipantProviderInterface
             throw new \InvalidArgumentException(sprintf(
                 'Argument 1 passed to ParticipantProvider::__construct is not valid (instance of %s or %s expected, %s given)',
                 'Symfony\Component\Security\Core\SecurityContextInterface',
-                'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface',
+                \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface::class,
                 is_object($securityContext) ? get_class($securityContext) : gettype($securityContext)
             ));
         }

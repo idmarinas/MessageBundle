@@ -26,9 +26,6 @@ abstract class AbstractMessageFormHandler
 
     /**
      * @param Request|RequestStack         $request
-     * @param ComposerInterface            $composer
-     * @param SenderInterface              $sender
-     * @param ParticipantProviderInterface $participantProvider
      */
     public function __construct($request, ComposerInterface $composer, SenderInterface $sender, ParticipantProviderInterface $participantProvider)
     {
@@ -47,7 +44,6 @@ abstract class AbstractMessageFormHandler
     /**
      * Processes the form with the request.
      *
-     * @param Form $form
      *
      * @return MessageInterface|false the sent message if the form is bound and valid, false otherwise
      */
@@ -71,7 +67,6 @@ abstract class AbstractMessageFormHandler
     /**
      * Processes the valid form, sends the message.
      *
-     * @param Form $form
      *
      * @return MessageInterface the sent message
      */
@@ -86,7 +81,6 @@ abstract class AbstractMessageFormHandler
     /**
      * Composes a message from the form data.
      *
-     * @param AbstractMessage $message
      *
      * @return MessageInterface the composed message ready to be sent
      */
