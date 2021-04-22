@@ -1,6 +1,6 @@
 <?php
 
-namespace FOS\MessageBundle\Document;
+namespace FOS\MessageBundle\Test\Document;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
