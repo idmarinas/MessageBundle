@@ -186,6 +186,7 @@ class ThreadManager extends BaseThreadManager
         // remove all non-word chars
         $search = preg_replace('/[^\w]/', ' ', trim($search));
         // build a regex like (term1|term2)
+        /** @noRector \Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector */
         $regex = sprintf('/(%s)/', implode('|', explode(' ', $search)));
 
         throw new \Exception('not yet implemented');
