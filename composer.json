@@ -64,6 +64,11 @@
             "FOS\\MessageBundle\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "FOS\\MessageBundle\\Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "test": "simple-phpunit"
     }
