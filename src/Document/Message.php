@@ -22,12 +22,9 @@ abstract class Message extends BaseMessage
      */
     protected $unreadForParticipants = array();
 
-    /**
-     * @param bool $isSpam
-     */
-    public function setIsSpam($isSpam)
+    public function setIsSpam(bool $isSpam)
     {
-        $this->isSpam = (bool) $isSpam;
+        $this->isSpam = $isSpam;
     }
 
     /*

@@ -42,12 +42,9 @@ abstract class ThreadMetadata
         return $this->isDeleted;
     }
 
-    /**
-     * @param bool $isDeleted
-     */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted(bool $isDeleted)
     {
-        $this->isDeleted = (bool) $isDeleted;
+        $this->isDeleted = $isDeleted;
     }
 
     /**

@@ -105,9 +105,8 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks the message as read or unread by this participant.
      *
-     * @param bool                 $isRead
      */
-    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)
+    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, bool $isRead)
     {
         $meta = $message->getMetadataForParticipant($participant);
         if (!$meta || $meta->getIsRead() == $isRead) {
@@ -117,7 +116,7 @@ class MessageManager extends BaseMessageManager
         $this->em->createQueryBuilder()
             ->update($this->metaClass, 'm')
             ->set('m.isRead', '?1')
-            ->setParameter('1', (bool) $isRead, \PDO::PARAM_BOOL)
+            ->setParameter('1', $isRead, \PDO::PARAM_BOOL)
 
             ->where('m.id = :id')
             ->setParameter('id', $meta->getId())

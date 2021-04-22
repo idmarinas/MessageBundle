@@ -21,9 +21,4 @@ class UserProvider implements UserProviderInterface
     {
         return User::class === $class;
     }
-
-    private function fetchUser($username)
-    {
-        return new User();
-    }
 }

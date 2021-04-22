@@ -10,12 +10,12 @@ class Query
     /**
      * @var string
      */
-    protected $original = null;
+    protected $original;
 
     /**
      * @var string
      */
-    protected $escaped = null;
+    protected $escaped;
 
     /**
      * @param string $original
@@ -30,7 +30,7 @@ class Query
     /**
      * @return string original
      */
-    public function getOriginal()
+    public function getOriginal(): string
     {
         return $this->original;
     }
@@ -66,7 +66,7 @@ class Query
      */
     public function __toString()
     {
-        return (string) $this->getOriginal();
+        return $this->getOriginal();
     }
 
     public function isEmpty()

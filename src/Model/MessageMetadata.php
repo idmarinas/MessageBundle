@@ -28,11 +28,8 @@ abstract class MessageMetadata
         return $this->isRead;
     }
 
-    /**
-     * @param bool $isRead
-     */
-    public function setIsRead($isRead)
+    public function setIsRead(bool $isRead)
     {
-        $this->isRead = (bool) $isRead;
+        $this->isRead = $isRead;
     }
 }

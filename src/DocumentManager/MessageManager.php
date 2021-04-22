@@ -107,9 +107,8 @@ class MessageManager extends BaseMessageManager
      * Marks messages as read/unread
      * by updating directly the storage.
      *
-     * @param bool                 $isRead
      */
-    protected function markIsReadByCondition(ParticipantInterface $participant, $isRead, \Closure $condition)
+    protected function markIsReadByCondition(ParticipantInterface $participant, bool $isRead, \Closure $condition)
     {
         $queryBuilder = $this->repository->createQueryBuilder();
         $condition($queryBuilder);
@@ -126,7 +125,7 @@ class MessageManager extends BaseMessageManager
         }
 
         $queryBuilder
-            ->field('metadata.$.isRead')->set((bool) $isRead)
+            ->field('metadata.$.isRead')->set($isRead)
             ->getQuery(array('multiple' => true))
             ->execute();
 
