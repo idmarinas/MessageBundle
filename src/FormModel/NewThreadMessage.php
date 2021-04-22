@@ -30,6 +30,7 @@ class NewThreadMessage extends AbstractMessage
 
     /**
      * @param string
+     * @param mixed $subject
      */
     public function setSubject($subject)
     {
@@ -46,6 +47,7 @@ class NewThreadMessage extends AbstractMessage
 
     /**
      * @param ParticipantInterface
+     * @param mixed $recipient
      */
     public function setRecipient($recipient)
     {

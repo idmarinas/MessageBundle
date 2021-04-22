@@ -33,10 +33,6 @@ class MessageManager extends BaseMessageManager
     {
     }
 
-    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)
-    {
-    }
-
     public function saveMessage(MessageInterface $message, $andFlush = true)
     {
     }
@@ -44,5 +40,9 @@ class MessageManager extends BaseMessageManager
     public function getClass()
     {
         return Message::class;
+    }
+
+    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)
+    {
     }
 }

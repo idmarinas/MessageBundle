@@ -32,7 +32,7 @@ class Composer implements ComposerInterface
     public function __construct(MessageManagerInterface $messageManager, ThreadManagerInterface $threadManager)
     {
         $this->messageManager = $messageManager;
-        $this->threadManager = $threadManager;
+        $this->threadManager  = $threadManager;
     }
 
     /**
@@ -42,7 +42,7 @@ class Composer implements ComposerInterface
      */
     public function newThread()
     {
-        $thread = $this->threadManager->createThread();
+        $thread  = $this->threadManager->createThread();
         $message = $this->messageManager->createMessage();
 
         return new NewThreadMessageBuilder($message, $thread);

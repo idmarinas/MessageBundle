@@ -63,32 +63,12 @@ abstract class Thread extends BaseThread
     }
 
     /**
-     * Gets the users participating in this conversation.
-     *
-     * Since the ORM schema does not map the participants collection field, it
-     * must be created on demand.
-     *
-     * @return ArrayCollection|ParticipantInterface[]
-     */
-    protected function getParticipantsCollection()
-    {
-        if (null === $this->participants) {
-            $this->participants = new ArrayCollection();
-
-            foreach ($this->metadata as $data) {
-                $this->participants->add($data->getParticipant());
-            }
-        }
-
-        return $this->participants;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function addParticipant(ParticipantInterface $participant)
     {
-        if (!$this->isParticipant($participant)) {
+        if ( ! $this->isParticipant($participant))
+        {
             $this->getParticipantsCollection()->add($participant);
         }
     }
@@ -97,6 +77,7 @@ abstract class Thread extends BaseThread
      * Adds many participants to the thread.
      *
      * @param array|\Traversable
+     * @param mixed $participants
      *
      * @throws \InvalidArgumentException
      *
@@ -104,11 +85,13 @@ abstract class Thread extends BaseThread
      */
     public function addParticipants($participants)
     {
-        if (!is_array($participants) && !$participants instanceof \Traversable) {
+        if ( ! \is_array($participants) && ! $participants instanceof \Traversable)
+        {
             throw new \InvalidArgumentException('Participants must be an array or instance of Traversable');
         }
 
-        foreach ($participants as $participant) {
+        foreach ($participants as $participant)
+        {
             $this->addParticipant($participant);
         }
 
@@ -140,5 +123,28 @@ abstract class Thread extends BaseThread
     {
         $meta->setThread($this);
         parent::addMetadata($meta);
+    }
+
+    /**
+     * Gets the users participating in this conversation.
+     *
+     * Since the ORM schema does not map the participants collection field, it
+     * must be created on demand.
+     *
+     * @return ArrayCollection|ParticipantInterface[]
+     */
+    protected function getParticipantsCollection()
+    {
+        if (null === $this->participants)
+        {
+            $this->participants = new ArrayCollection();
+
+            foreach ($this->metadata as $data)
+            {
+                $this->participants->add($data->getParticipant());
+            }
+        }
+
+        return $this->participants;
     }
 }

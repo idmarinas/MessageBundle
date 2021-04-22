@@ -41,9 +41,9 @@ class Deleter implements DeleterInterface
 
     public function __construct(AuthorizerInterface $authorizer, ParticipantProviderInterface $participantProvider, EventDispatcherInterface $dispatcher)
     {
-        $this->authorizer = $authorizer;
+        $this->authorizer          = $authorizer;
         $this->participantProvider = $participantProvider;
-        $this->dispatcher = $dispatcher;
+        $this->dispatcher          = $dispatcher;
     }
 
     /**
@@ -51,7 +51,8 @@ class Deleter implements DeleterInterface
      */
     public function markAsDeleted(ThreadInterface $thread)
     {
-        if (!$this->authorizer->canDeleteThread($thread)) {
+        if ( ! $this->authorizer->canDeleteThread($thread))
+        {
             throw new AccessDeniedException('You are not allowed to delete this thread');
         }
         $thread->setIsDeletedByParticipant($this->getAuthenticatedParticipant(), true);
@@ -64,7 +65,8 @@ class Deleter implements DeleterInterface
      */
     public function markAsUndeleted(ThreadInterface $thread)
     {
-        if (!$this->authorizer->canDeleteThread($thread)) {
+        if ( ! $this->authorizer->canDeleteThread($thread))
+        {
             throw new AccessDeniedException('You are not allowed to delete this thread');
         }
         $thread->setIsDeletedByParticipant($this->getAuthenticatedParticipant(), false);

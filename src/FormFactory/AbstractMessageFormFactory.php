@@ -43,17 +43,14 @@ abstract class AbstractMessageFormFactory
 
     public function __construct(FormFactoryInterface $formFactory, $formType, $formName, $messageClass)
     {
-        if (!is_string($formType) && !$formType instanceof AbstractType) {
-            throw new \InvalidArgumentException(sprintf(
-                'Form type provided is not valid (class name or instance of %s expected, %s given)',
-                \Symfony\Component\Form\AbstractType::class,
-                is_object($formType) ? get_class($formType) : gettype($formType)
-            ));
+        if ( ! \is_string($formType) && ! $formType instanceof AbstractType)
+        {
+            throw new \InvalidArgumentException(\sprintf('Form type provided is not valid (class name or instance of %s expected, %s given)', \Symfony\Component\Form\AbstractType::class, \is_object($formType) ? \get_class($formType) : \gettype($formType)));
         }
 
-        $this->formFactory = $formFactory;
-        $this->formType = $formType;
-        $this->formName = $formName;
+        $this->formFactory  = $formFactory;
+        $this->formType     = $formType;
+        $this->formName     = $formName;
         $this->messageClass = $messageClass;
     }
 

@@ -55,10 +55,10 @@ class Provider implements ProviderInterface
 
     public function __construct(ThreadManagerInterface $threadManager, MessageManagerInterface $messageManager, ReaderInterface $threadReader, AuthorizerInterface $authorizer, ParticipantProviderInterface $participantProvider)
     {
-        $this->threadManager = $threadManager;
-        $this->messageManager = $messageManager;
-        $this->threadReader = $threadReader;
-        $this->authorizer = $authorizer;
+        $this->threadManager       = $threadManager;
+        $this->messageManager      = $messageManager;
+        $this->threadReader        = $threadReader;
+        $this->authorizer          = $authorizer;
         $this->participantProvider = $participantProvider;
     }
 
@@ -98,10 +98,12 @@ class Provider implements ProviderInterface
     public function getThread($threadId)
     {
         $thread = $this->threadManager->findThreadById($threadId);
-        if (!$thread) {
+        if ( ! $thread)
+        {
             throw new NotFoundHttpException('There is no such thread');
         }
-        if (!$this->authorizer->canSeeThread($thread)) {
+        if ( ! $this->authorizer->canSeeThread($thread))
+        {
             throw new AccessDeniedException('You are not allowed to see this thread');
         }
         // Load the thread messages before marking them as read

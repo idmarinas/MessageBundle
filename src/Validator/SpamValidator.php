@@ -21,11 +21,12 @@ class SpamValidator extends ConstraintValidator
     /**
      * Indicates whether the constraint is valid.
      *
-     * @param object     $value
+     * @param object $value
      */
     public function validate($value, Constraint $constraint)
     {
-        if ($this->spamDetector->isSpam($value)) {
+        if ($this->spamDetector->isSpam($value))
+        {
             $this->context->addViolation($constraint->message);
         }
     }

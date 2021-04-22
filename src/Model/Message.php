@@ -60,7 +60,7 @@ abstract class Message implements MessageInterface
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->metadata = new ArrayCollection();
+        $this->metadata  = new ArrayCollection();
     }
 
     /**
@@ -148,18 +148,17 @@ abstract class Message implements MessageInterface
     /**
      * Get the MessageMetadata for a participant.
      *
-     *
      * @return MessageMetadata
      */
     public function getMetadataForParticipant(ParticipantInterface $participant)
     {
-        foreach ($this->metadata as $meta) {
-            if ($meta->getParticipant()->getId() == $participant->getId()) {
+        foreach ($this->metadata as $meta)
+        {
+            if ($meta->getParticipant()->getId() == $participant->getId())
+            {
                 return $meta;
             }
         }
-
-        return null;
     }
 
     /**
@@ -167,7 +166,8 @@ abstract class Message implements MessageInterface
      */
     public function isReadByParticipant(ParticipantInterface $participant)
     {
-        if ($meta = $this->getMetadataForParticipant($participant)) {
+        if ($meta = $this->getMetadataForParticipant($participant))
+        {
             return $meta->getIsRead();
         }
 
@@ -179,8 +179,9 @@ abstract class Message implements MessageInterface
      */
     public function setIsReadByParticipant(ParticipantInterface $participant, $isRead)
     {
-        if (!$meta = $this->getMetadataForParticipant($participant)) {
-            throw new \InvalidArgumentException(sprintf('No metadata exists for participant with id "%s"', $participant->getId()));
+        if ( ! $meta = $this->getMetadataForParticipant($participant))
+        {
+            throw new \InvalidArgumentException(\sprintf('No metadata exists for participant with id "%s"', $participant->getId()));
         }
 
         $meta->setIsRead($isRead);

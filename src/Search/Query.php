@@ -24,7 +24,17 @@ class Query
     public function __construct($original, $escaped)
     {
         $this->original = $original;
-        $this->escaped = $escaped;
+        $this->escaped  = $escaped;
+    }
+
+    /**
+     * Converts to the original term string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getOriginal();
     }
 
     /**
@@ -57,16 +67,6 @@ class Query
     public function setEscaped($escaped)
     {
         $this->escaped = $escaped;
-    }
-
-    /**
-     * Converts to the original term string.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getOriginal();
     }
 
     public function isEmpty()

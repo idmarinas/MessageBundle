@@ -10,11 +10,13 @@ class UserToUsernameTransformer implements DataTransformerInterface
 {
     public function transform($value)
     {
-        if (null === $value) {
+        if (null === $value)
+        {
             return;
         }
 
-        if (!$value instanceof User) {
+        if ( ! $value instanceof User)
+        {
             throw new \RuntimeException();
         }
 

@@ -27,7 +27,7 @@ class QueryFactory implements QueryFactoryInterface
      */
     public function __construct($requestStack, $queryParameter)
     {
-        $this->request = $requestStack;
+        $this->request        = $requestStack;
         $this->queryParameter = $queryParameter;
     }
 
@@ -37,7 +37,7 @@ class QueryFactory implements QueryFactoryInterface
     public function createFromRequest()
     {
         $original = $this->getCurrentRequest()->query->get($this->queryParameter);
-        $original = trim($original);
+        $original = \trim($original);
 
         $escaped = $this->escapeTerm($original);
 
@@ -62,11 +62,12 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * BC layer to retrieve the current request directly or from a stack.
      *
-     * @return null|Request
+     * @return Request|null
      */
     private function getCurrentRequest()
     {
-        if ($this->request instanceof Request) {
+        if ($this->request instanceof Request)
+        {
             return $this->request;
         }
 

@@ -40,16 +40,15 @@ class MessageManager extends BaseMessageManager
     protected $metaClass;
 
     /**
-     * @param DocumentManager $dm
-     * @param string          $class
-     * @param string          $metaClass
+     * @param string $class
+     * @param string $metaClass
      */
     public function __construct(DocumentManager $dm, $class, $metaClass)
     {
-        $this->dm = $dm;
+        $this->dm         = $dm;
         $this->repository = $dm->getRepository($class);
-        $this->class = $dm->getClassMetadata($class)->name;
-        $this->metaClass = $dm->getClassMetadata($metaClass)->name;
+        $this->class      = $dm->getClassMetadata($class)->name;
+        $this->metaClass  = $dm->getClassMetadata($metaClass)->name;
     }
 
     /**
@@ -60,7 +59,8 @@ class MessageManager extends BaseMessageManager
         return $this->repository->createQueryBuilder()
             ->field('unreadForParticipants')->equals($participant->getId())
             ->getQuery()
-            ->count();
+            ->count()
+        ;
     }
 
     /**
@@ -82,23 +82,61 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks all messages of this thread as read by this participant.
      *
-     * @param bool                 $isRead
+     * @param bool $isRead
      */
     public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead)
     {
-        $this->markIsReadByCondition($participant, $isRead, function (Builder $queryBuilder) use ($thread) {
+        $this->markIsReadByCondition($participant, $isRead, function (Builder $queryBuilder) use ($thread)
+        {
             $queryBuilder->field('thread.$id')->equals(new \MongoId($thread->getId()));
         });
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function saveMessage(MessageInterface $message, $andFlush = true)
+    {
+        $message->denormalize();
+        $this->dm->persist($message);
+        if ($andFlush)
+        {
+            $this->dm->flush();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /*
+     * DENORMALIZATION
+     *
+     * All following methods are relative to denormalization
+     */
+
+    /**
+     * Performs denormalization tricks.
+     */
+    public function denormalize(Message $message)
+    {
+        $this->doEnsureMessageMetadataExists($message);
+        $message->denormalize();
+    }
+
+    /**
      * Marks the message as read or unread by this participant.
      *
-     * @param bool                 $isRead
+     * @param bool $isRead
      */
     protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)
     {
-        $this->markIsReadByCondition($participant, $isRead, function (Builder $queryBuilder) use ($message) {
+        $this->markIsReadByCondition($participant, $isRead, function (Builder $queryBuilder) use ($message)
+        {
             $queryBuilder->field('_id')->equals(new \MongoId($message->getId()));
         });
     }
@@ -106,7 +144,6 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks messages as read/unread
      * by updating directly the storage.
-     *
      */
     protected function markIsReadByCondition(ParticipantInterface $participant, bool $isRead, \Closure $condition)
     {
@@ -120,49 +157,33 @@ class MessageManager extends BaseMessageManager
          * true for the inverse. We should only add a participant ID to this
          * array if the message is not considered spam.
          */
-        if ($isRead) {
+        if ($isRead)
+        {
             $queryBuilder->field('unreadForParticipants')->pull($participant->getId());
         }
 
         $queryBuilder
             ->field('metadata.$.isRead')->set($isRead)
-            ->getQuery(array('multiple' => true))
-            ->execute();
+            ->getQuery(['multiple' => true])
+            ->execute()
+        ;
 
         /* If marking the message as unread for a participant, add their ID to
          * the unreadForParticipants array if the message is not spam. This must
          * be done in a separate query, since the criteria is more selective.
          */
-        if (!$isRead) {
+        if ( ! $isRead)
+        {
             $queryBuilder = $this->repository->createQueryBuilder();
             $condition($queryBuilder);
             $queryBuilder->update()
                 ->field('metadata.participant.$id')->equals(new \MongoId($participant->getId()))
                 ->field('isSpam')->equals(false)
                 ->field('unreadForParticipants')->addToSet($participant->getId())
-                ->getQuery(array('multiple' => true))
-                ->execute();
+                ->getQuery(['multiple' => true])
+                ->execute()
+            ;
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function saveMessage(MessageInterface $message, $andFlush = true)
-    {
-        $message->denormalize();
-        $this->dm->persist($message);
-        if ($andFlush) {
-            $this->dm->flush();
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass()
-    {
-        return $this->class;
     }
 
     /**
@@ -175,31 +196,20 @@ class MessageManager extends BaseMessageManager
         return new $this->metaClass();
     }
 
-    /*
-     * DENORMALIZATION
-     *
-     * All following methods are relative to denormalization
-     */
-    /**
-     * Performs denormalization tricks.
-     */
-    public function denormalize(Message $message)
-    {
-        $this->doEnsureMessageMetadataExists($message);
-        $message->denormalize();
-    }
-
     /**
      * Ensures that the message has metadata for each thread participant.
      */
     protected function doEnsureMessageMetadataExists(Message $message)
     {
-        if (!$thread = $message->getThread()) {
-            throw new \InvalidArgumentException(sprintf('No thread is referenced in message with id "%s"', $message->getId()));
+        if ( ! $thread = $message->getThread())
+        {
+            throw new \InvalidArgumentException(\sprintf('No thread is referenced in message with id "%s"', $message->getId()));
         }
 
-        foreach ($thread->getParticipants() as $participant) {
-            if (!$meta = $message->getMetadataForParticipant($participant)) {
+        foreach ($thread->getParticipants() as $participant)
+        {
+            if ( ! $meta = $message->getMetadataForParticipant($participant))
+            {
                 $meta = $this->createMessageMetadata();
                 $meta->setParticipant($participant);
                 $message->addMetadata($meta);

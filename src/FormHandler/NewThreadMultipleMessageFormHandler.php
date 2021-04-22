@@ -16,14 +16,15 @@ class NewThreadMultipleMessageFormHandler extends AbstractMessageFormHandler
     /**
      * Composes a message from the form data.
      *
-     *
      * @throws \InvalidArgumentException if the message is not a NewThreadMessage
+     *
      * @return MessageInterface the composed message ready to be sent
      */
     public function composeMessage(AbstractMessage $message)
     {
-        if (!$message instanceof NewThreadMultipleMessage) {
-            throw new \InvalidArgumentException(sprintf('Message must be a NewThreadMultipleMessage instance, "%s" given', get_class($message)));
+        if ( ! $message instanceof NewThreadMultipleMessage)
+        {
+            throw new \InvalidArgumentException(\sprintf('Message must be a NewThreadMultipleMessage instance, "%s" given', \get_class($message)));
         }
 
         return $this->composer->newThread()
@@ -31,6 +32,7 @@ class NewThreadMultipleMessageFormHandler extends AbstractMessageFormHandler
             ->addRecipients($message->getRecipients())
             ->setSender($this->getAuthenticatedParticipant())
             ->setBody($message->getBody())
-            ->getMessage();
+            ->getMessage()
+        ;
     }
 }

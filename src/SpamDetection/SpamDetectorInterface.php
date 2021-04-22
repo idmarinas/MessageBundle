@@ -14,7 +14,6 @@ interface SpamDetectorInterface
     /**
      * Tells whether or not a new message looks like spam.
      *
-     *
      * @return bool true if it is spam, false otherwise
      */
     public function isSpam(NewThreadMessage $message);

@@ -37,6 +37,8 @@ interface ProviderInterface
      * Performs authorization checks
      * Marks the thread as read.
      *
+     * @param mixed $threadId
+     *
      * @return ThreadInterface
      */
     public function getThread($threadId);

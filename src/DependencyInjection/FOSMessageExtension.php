@@ -14,18 +14,19 @@ class FOSMessageExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $processor = new Processor();
+        $processor     = new Processor();
         $configuration = new Configuration();
 
         $config = $processor->processConfiguration($configuration, $configs);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        if (!in_array(strtolower($config['db_driver']), array('orm', 'mongodb'))) {
-            throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
+        if ( ! \in_array(\strtolower($config['db_driver']), ['orm', 'mongodb']))
+        {
+            throw new \InvalidArgumentException(\sprintf('Invalid db driver "%s".', $config['db_driver']));
         }
 
-        $loader->load(sprintf('%s.xml', $config['db_driver']));
+        $loader->load(\sprintf('%s.xml', $config['db_driver']));
         $loader->load('config.xml');
         $loader->load('form.xml');
         $loader->load('validator.xml');
@@ -55,28 +56,36 @@ class FOSMessageExtension extends Extension
 
         // BC management
         $newThreadFormType = $config['new_thread_form']['type'];
-        $replyFormType = $config['reply_form']['type'];
+        $replyFormType     = $config['reply_form']['type'];
 
-        if (!class_exists($newThreadFormType)) {
-            @trigger_error('Using a service reference in configuration key "fos_message.new_thread_form.type" is deprecated since version 1.2 and will be removed in 2.0. Use the class name of your form type instead.', E_USER_DEPRECATED);
+        if ( ! \class_exists($newThreadFormType))
+        {
+            @\trigger_error('Using a service reference in configuration key "fos_message.new_thread_form.type" is deprecated since version 1.2 and will be removed in 2.0. Use the class name of your form type instead.', E_USER_DEPRECATED);
 
             // Old syntax (service reference)
             $container->setAlias('fos_message.new_thread_form.type', new Alias($newThreadFormType, true));
-        } else {
+        }
+        else
+        {
             // New syntax (class name)
             $container->getDefinition('fos_message.new_thread_form.factory.default')
-                ->replaceArgument(1, $newThreadFormType);
+                ->replaceArgument(1, $newThreadFormType)
+            ;
         }
 
-        if (!class_exists($replyFormType)) {
-            @trigger_error('Using a service reference in configuration key "fos_message.reply_form.type" is deprecated since version 1.2 and will be removed in 2.0. Use the class name of your form type instead.', E_USER_DEPRECATED);
+        if ( ! \class_exists($replyFormType))
+        {
+            @\trigger_error('Using a service reference in configuration key "fos_message.reply_form.type" is deprecated since version 1.2 and will be removed in 2.0. Use the class name of your form type instead.', E_USER_DEPRECATED);
 
             // Old syntax (service reference)
             $container->setAlias('fos_message.reply_form.type', new Alias($replyFormType, true));
-        } else {
+        }
+        else
+        {
             // New syntax (class name)
             $container->getDefinition('fos_message.reply_form.factory.default')
-                ->replaceArgument(1, $replyFormType);
+                ->replaceArgument(1, $replyFormType)
+            ;
         }
 
         $container->setAlias('fos_message.new_thread_form.factory', new Alias($config['new_thread_form']['factory'], true));
@@ -87,9 +96,11 @@ class FOSMessageExtension extends Extension
         $container->setAlias('fos_message.search_query_factory', new Alias($config['search']['query_factory'], true));
         $container->setAlias('fos_message.search_finder', new Alias($config['search']['finder'], true));
         $container->getDefinition('fos_message.search_query_factory.default')
-            ->replaceArgument(1, $config['search']['query_parameter']);
+            ->replaceArgument(1, $config['search']['query_parameter'])
+        ;
 
         $container->getDefinition('fos_message.recipients_data_transformer')
-            ->replaceArgument(0, new Reference($config['user_transformer']));
+            ->replaceArgument(0, new Reference($config['user_transformer']))
+        ;
     }
 }

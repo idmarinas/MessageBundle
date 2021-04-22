@@ -30,7 +30,7 @@ abstract class AbstractMessageBuilder
     public function __construct(MessageInterface $message, ThreadInterface $thread)
     {
         $this->message = $message;
-        $this->thread = $thread;
+        $this->thread  = $thread;
 
         $this->message->setThread($thread);
         $thread->addMessage($message);
@@ -48,6 +48,7 @@ abstract class AbstractMessageBuilder
 
     /**
      * @param  string
+     * @param mixed $body
      *
      * @return AbstractMessageBuilder (fluent interface)
      */

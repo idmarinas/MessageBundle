@@ -35,17 +35,19 @@ class RecipientsDataTransformer implements DataTransformerInterface
      */
     public function transform($recipients)
     {
-        if (null === $recipients || 0 === $recipients->count()) {
+        if (null === $recipients || 0 === $recipients->count())
+        {
             return '';
         }
 
-        $usernames = array();
+        $usernames = [];
 
-        foreach ($recipients as $recipient) {
+        foreach ($recipients as $recipient)
+        {
             $usernames[] = $this->userToUsernameTransformer->transform($recipient);
         }
 
-        return implode(', ', $usernames);
+        return \implode(', ', $usernames);
     }
 
     /**
@@ -60,22 +62,26 @@ class RecipientsDataTransformer implements DataTransformerInterface
      */
     public function reverseTransform($usernames)
     {
-        if (null === $usernames || '' === $usernames) {
-            return null;
+        if (null === $usernames || '' === $usernames)
+        {
+            return;
         }
 
-        if (!is_string($usernames)) {
+        if ( ! \is_string($usernames))
+        {
             throw new UnexpectedTypeException($usernames, 'string');
         }
 
-        $recipients = new ArrayCollection();
-        $recipientsNames = array_filter(explode(',', $usernames));
+        $recipients      = new ArrayCollection();
+        $recipientsNames = \array_filter(\explode(',', $usernames));
 
-        foreach ($recipientsNames as $username) {
-            $user = $this->userToUsernameTransformer->reverseTransform(trim($username));
+        foreach ($recipientsNames as $username)
+        {
+            $user = $this->userToUsernameTransformer->reverseTransform(\trim($username));
 
-            if (!$user instanceof UserInterface) {
-                throw new TransformationFailedException(sprintf('User "%s" does not exists', $username));
+            if ( ! $user instanceof UserInterface)
+            {
+                throw new TransformationFailedException(\sprintf('User "%s" does not exists', $username));
             }
 
             $recipients->add($user);

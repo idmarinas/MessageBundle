@@ -4,21 +4,21 @@ namespace FOS\MessageBundle\Controller;
 
 use FOS\MessageBundle\Provider\ProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MessageController extends AbstractController
 {
-    public function __construct(ContainerInterface $container)
-    {
-        $this->setContainer($container);
-    }
-
     /**
      * @var ContainerInterface
      */
     protected $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->setContainer($container);
+    }
 
     /**
      * Displays the authenticated participant inbox.
@@ -29,9 +29,9 @@ class MessageController extends AbstractController
     {
         $threads = $this->getProvider()->getInboxThreads();
 
-        return $this->render('@FOSMessage/Message/inbox.html.twig', array(
+        return $this->render('@FOSMessage/Message/inbox.html.twig', [
             'threads' => $threads,
-        ));
+        ]);
     }
 
     /**
@@ -43,9 +43,9 @@ class MessageController extends AbstractController
     {
         $threads = $this->getProvider()->getSentThreads();
 
-        return $this->render('@FOSMessage/Message/sent.html.twig', array(
+        return $this->render('@FOSMessage/Message/sent.html.twig', [
             'threads' => $threads,
-        ));
+        ]);
     }
 
     /**
@@ -57,9 +57,9 @@ class MessageController extends AbstractController
     {
         $threads = $this->getProvider()->getDeletedThreads();
 
-        return $this->render('@FOSMessage/Message/deleted.html.twig', array(
+        return $this->render('@FOSMessage/Message/deleted.html.twig', [
             'threads' => $threads,
-        ));
+        ]);
     }
 
     /**
@@ -71,20 +71,21 @@ class MessageController extends AbstractController
      */
     public function threadAction($threadId)
     {
-        $thread = $this->getProvider()->getThread($threadId);
-        $form = $this->container->get('fos_message.reply_form.factory')->create($thread);
+        $thread      = $this->getProvider()->getThread($threadId);
+        $form        = $this->container->get('fos_message.reply_form.factory')->create($thread);
         $formHandler = $this->container->get('fos_message.reply_form.handler');
 
-        if ($message = $formHandler->process($form)) {
-            return new RedirectResponse($this->container->get('router')->generate('fos_message_thread_view', array(
+        if ($message = $formHandler->process($form))
+        {
+            return new RedirectResponse($this->container->get('router')->generate('fos_message_thread_view', [
                 'threadId' => $message->getThread()->getId(),
-            )));
+            ]));
         }
 
-        return $this->render('@FOSMessage/Message/thread.html.twig', array(
-            'form' => $form->createView(),
+        return $this->render('@FOSMessage/Message/thread.html.twig', [
+            'form'   => $form->createView(),
             'thread' => $thread,
-        ));
+        ]);
     }
 
     /**
@@ -94,19 +95,20 @@ class MessageController extends AbstractController
      */
     public function newThreadAction()
     {
-        $form = $this->container->get('fos_message.new_thread_form.factory')->create();
+        $form        = $this->container->get('fos_message.new_thread_form.factory')->create();
         $formHandler = $this->container->get('fos_message.new_thread_form.handler');
 
-        if ($message = $formHandler->process($form)) {
-            return new RedirectResponse($this->container->get('router')->generate('fos_message_thread_view', array(
+        if ($message = $formHandler->process($form))
+        {
+            return new RedirectResponse($this->container->get('router')->generate('fos_message_thread_view', [
                 'threadId' => $message->getThread()->getId(),
-            )));
+            ]));
         }
 
-        return $this->render('@FOSMessage/Message/newThread.html.twig', array(
+        return $this->render('@FOSMessage/Message/newThread.html.twig', [
             'form' => $form->createView(),
             'data' => $form->getData(),
-        ));
+        ]);
     }
 
     /**
@@ -148,13 +150,13 @@ class MessageController extends AbstractController
      */
     public function searchAction()
     {
-        $query = $this->container->get('fos_message.search_query_factory')->createFromRequest();
+        $query   = $this->container->get('fos_message.search_query_factory')->createFromRequest();
         $threads = $this->container->get('fos_message.search_finder')->find($query);
 
-        return $this->render('@FOSMessage/Message/search.html.twig', array(
-            'query' => $query,
+        return $this->render('@FOSMessage/Message/search.html.twig', [
+            'query'   => $query,
             'threads' => $threads,
-        ));
+        ]);
     }
 
     /**

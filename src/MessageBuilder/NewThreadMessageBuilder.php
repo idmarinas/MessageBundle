@@ -16,6 +16,7 @@ class NewThreadMessageBuilder extends AbstractMessageBuilder
      * The thread subject.
      *
      * @param  string
+     * @param mixed $subject
      *
      * @return NewThreadMessageBuilder (fluent interface)
      */
@@ -41,7 +42,8 @@ class NewThreadMessageBuilder extends AbstractMessageBuilder
      */
     public function addRecipients(Collection $recipients)
     {
-        foreach ($recipients as $recipient) {
+        foreach ($recipients as $recipient)
+        {
             $this->addRecipient($recipient);
         }
 

@@ -37,15 +37,15 @@ class MessageManager extends BaseMessageManager
     protected $metaClass;
 
     /**
-     * @param string        $class
-     * @param string        $metaClass
+     * @param string $class
+     * @param string $metaClass
      */
     public function __construct(EntityManager $em, $class, $metaClass)
     {
-        $this->em = $em;
+        $this->em         = $em;
         $this->repository = $em->getRepository($class);
-        $this->class = $em->getClassMetadata($class)->name;
-        $this->metaClass = $em->getClassMetadata($metaClass)->name;
+        $this->class      = $em->getClassMetadata($class)->name;
+        $this->metaClass  = $em->getClassMetadata($metaClass)->name;
     }
 
     /**
@@ -71,7 +71,8 @@ class MessageManager extends BaseMessageManager
             ->setParameter('isRead', false, \PDO::PARAM_BOOL)
 
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -93,23 +94,45 @@ class MessageManager extends BaseMessageManager
     /**
      * Marks all messages of this thread as read by this participant.
      *
-     * @param bool                 $isRead
+     * @param bool $isRead
      */
     public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead)
     {
-        foreach ($thread->getMessages() as $message) {
+        foreach ($thread->getMessages() as $message)
+        {
             $this->markIsReadByParticipant($message, $participant, $isRead);
         }
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function saveMessage(MessageInterface $message, $andFlush = true)
+    {
+        $this->denormalize($message);
+        $this->em->persist($message);
+        if ($andFlush)
+        {
+            $this->em->flush();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
      * Marks the message as read or unread by this participant.
-     *
      */
     protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, bool $isRead)
     {
         $meta = $message->getMetadataForParticipant($participant);
-        if (!$meta || $meta->getIsRead() == $isRead) {
+        if ( ! $meta || $meta->getIsRead() == $isRead)
+        {
             return;
         }
 
@@ -122,27 +145,8 @@ class MessageManager extends BaseMessageManager
             ->setParameter('id', $meta->getId())
 
             ->getQuery()
-            ->execute();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function saveMessage(MessageInterface $message, $andFlush = true)
-    {
-        $this->denormalize($message);
-        $this->em->persist($message);
-        if ($andFlush) {
-            $this->em->flush();
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass()
-    {
-        return $this->class;
+            ->execute()
+        ;
     }
 
     /*
@@ -164,9 +168,11 @@ class MessageManager extends BaseMessageManager
      */
     protected function doMetadata(MessageInterface $message)
     {
-        foreach ($message->getThread()->getAllMetadata() as $threadMeta) {
+        foreach ($message->getThread()->getAllMetadata() as $threadMeta)
+        {
             $meta = $message->getMetadataForParticipant($threadMeta->getParticipant());
-            if (!$meta) {
+            if ( ! $meta)
+            {
                 $meta = $this->createMessageMetadata();
                 $meta->setParticipant($threadMeta->getParticipant());
 

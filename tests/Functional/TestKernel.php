@@ -31,12 +31,12 @@ class TestKernel extends Kernel
      */
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
             new SecurityBundle(),
             new TwigBundle(),
             new FOSMessageBundle(),
-        );
+        ];
     }
 
     /**
@@ -52,27 +52,27 @@ class TestKernel extends Kernel
      */
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
-        $c->loadFromExtension('framework', array(
+        $c->loadFromExtension('framework', [
             'secret' => 'MySecretKey',
-            'test' => null,
-            'form' => null,
-        ));
+            'test'   => null,
+            'form'   => null,
+        ]);
 
-        $c->loadFromExtension('security', array(
-            'providers' => array('permissive' => array('id' => 'app.user_provider')),
-            'encoders' => array(\FOS\MessageBundle\Tests\Functional\Entity\User::class => 'plaintext'),
-            'firewalls' => array('main' => array('http_basic' => true)),
-        ));
+        $c->loadFromExtension('security', [
+            'providers' => ['permissive' => ['id' => 'app.user_provider']],
+            'encoders'  => [\FOS\MessageBundle\Tests\Functional\Entity\User::class => 'plaintext'],
+            'firewalls' => ['main' => ['http_basic' => true]],
+        ]);
 
-        $c->loadFromExtension('twig', array(
+        $c->loadFromExtension('twig', [
             'strict_variables' => '%kernel.debug%',
-        ));
+        ]);
 
-        $c->loadFromExtension('fos_message', array(
-            'db_driver' => 'orm',
-            'thread_class' => Thread::class,
+        $c->loadFromExtension('fos_message', [
+            'db_driver'     => 'orm',
+            'thread_class'  => Thread::class,
             'message_class' => Message::class,
-        ));
+        ]);
 
         $c->register('fos_user.user_to_username_transformer', UserToUsernameTransformer::class);
         $c->register('app.user_provider', UserProvider::class);
@@ -80,7 +80,8 @@ class TestKernel extends Kernel
     }
 }
 
-class RegisteringManagersPass implements CompilerPassInterface {
+class RegisteringManagersPass implements CompilerPassInterface
+{
     public function process(ContainerBuilder $container)
     {
         $container->register('fos_message.message_manager.default', MessageManager::class);

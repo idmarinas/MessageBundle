@@ -43,11 +43,23 @@ class MongoDBMigrateMetadataCommand extends ContainerAwareCommand
      */
     public function isEnabled()
     {
-        if (!$this->getContainer()->has('doctrine.odm.mongodb')) {
+        if ( ! $this->getContainer()->has('doctrine.odm.mongodb'))
+        {
             return false;
         }
 
         return parent::isEnabled();
+    }
+
+    /**
+     * Invokes the print status callback.
+     *
+     * Since unregister_tick_function() does not support anonymous functions, it
+     * is easier to register one method (this) and invoke a dynamic callback.
+     */
+    public function printStatus()
+    {
+        \call_user_func($this->printStatusCallback);
     }
 
     /**
@@ -62,33 +74,33 @@ class MongoDBMigrateMetadataCommand extends ContainerAwareCommand
             ->addOption('safe', null, InputOption::VALUE_OPTIONAL, 'Mongo update option', false)
             ->addOption('fsync', null, InputOption::VALUE_OPTIONAL, 'Mongo update option', false)
             ->setHelp(<<<'EOT'
-The <info>fos:message:mongodb:migrate:metadata</info> command migrates old document hash
-fields to a new schema optimized for MongoDB queries. This command requires the
-participant class to be provided as its first and only parameter:
+                The <info>fos:message:mongodb:migrate:metadata</info> command migrates old document hash
+                fields to a new schema optimized for MongoDB queries. This command requires the
+                participant class to be provided as its first and only parameter:
 
-  <info>php app/console fos:message:mongodb:migrate:metadata "Acme\Document\User"</info>
+                  <info>php app/console fos:message:mongodb:migrate:metadata "Acme\Document\User"</info>
 
-The following hash fields will become obsolete after migration:
+                The following hash fields will become obsolete after migration:
 
-  <info>*</info> message.isReadByParticipant
-  <info>*</info> thread.datesOfLastMessageWrittenByOtherParticipant
-  <info>*</info> thread.datesOfLastMessageWrittenByParticipant
-  <info>*</info> thread.isDeletedByParticipant
+                  <info>*</info> message.isReadByParticipant
+                  <info>*</info> thread.datesOfLastMessageWrittenByOtherParticipant
+                  <info>*</info> thread.datesOfLastMessageWrittenByParticipant
+                  <info>*</info> thread.isDeletedByParticipant
 
-The following new fields will be created:
+                The following new fields will be created:
 
-  <info>*</info> message.metadata <comment>(array of embedded metadata documents)</comment>
-  <info>*</info> message.unreadForParticipants <comment>(array of participant ID's)</comment>
-  <info>*</info> thread.activeParticipants <comment>(array of participant ID's)</comment>
-  <info>*</info> thread.activeRecipients <comment>(array of participant ID's)</comment>
-  <info>*</info> thread.activeSenders <comment>(array of participant ID's)</comment>
-  <info>*</info> thread.lastMessageDate <comment>(timestamp of the most recent message)</comment>
-  <info>*</info> thread.metadata <comment>(array of embedded metadata documents)</comment>
+                  <info>*</info> message.metadata <comment>(array of embedded metadata documents)</comment>
+                  <info>*</info> message.unreadForParticipants <comment>(array of participant ID's)</comment>
+                  <info>*</info> thread.activeParticipants <comment>(array of participant ID's)</comment>
+                  <info>*</info> thread.activeRecipients <comment>(array of participant ID's)</comment>
+                  <info>*</info> thread.activeSenders <comment>(array of participant ID's)</comment>
+                  <info>*</info> thread.lastMessageDate <comment>(timestamp of the most recent message)</comment>
+                  <info>*</info> thread.metadata <comment>(array of embedded metadata documents)</comment>
 
-<info>Note:</info> This migration script will not unset any obsolete fields, which will
-preserve backwards compatibility. You may manually remove those fields from
-message and thread documents at your own discretion.
-EOT
+                <info>Note:</info> This migration script will not unset any obsolete fields, which will
+                preserve backwards compatibility. You may manually remove those fields from
+                message and thread documents at your own discretion.
+                EOT
             )
         ;
     }
@@ -100,19 +112,20 @@ EOT
     {
         $registry = $this->getContainer()->get('doctrine.odm.mongodb');
 
-        $this->messageCollection = $this->getMongoCollectionForClass($registry, $this->getContainer()->getParameter('fos_message.message_class'));
-        $this->threadCollection = $this->getMongoCollectionForClass($registry, $this->getContainer()->getParameter('fos_message.thread_class'));
+        $this->messageCollection     = $this->getMongoCollectionForClass($registry, $this->getContainer()->getParameter('fos_message.message_class'));
+        $this->threadCollection      = $this->getMongoCollectionForClass($registry, $this->getContainer()->getParameter('fos_message.thread_class'));
         $this->participantCollection = $this->getMongoCollectionForClass($registry, $input->getArgument('participantClass'));
 
-        $this->updateOptions = array(
+        $this->updateOptions = [
             'multiple' => false,
-            'safe' => $input->getOption('safe'),
-            'fsync' => $input->getOption('fsync'),
-        );
+            'safe'     => $input->getOption('safe'),
+            'fsync'    => $input->getOption('fsync'),
+        ];
 
-        $this->printStatusCallback = function () {
+        $this->printStatusCallback = function ()
+        {
         };
-        register_tick_function(array($this, 'printStatus'));
+        \register_tick_function([$this, 'printStatus']);
     }
 
     /**
@@ -123,9 +136,10 @@ EOT
         $this->migrateMessages($output);
         $this->migrateThreads($output);
 
-        $size = memory_get_peak_usage(true);
-        $unit = array('b', 'k', 'm', 'g', 't', 'p');
-        $output->writeln(sprintf('Peak Memory Usage: <comment>%s</comment>', round($size / 1024 ** ($i = floor(log($size, 1024))), 2).$unit[$i]));
+        $size = \memory_get_peak_usage(true);
+        $unit = ['b', 'k', 'm', 'g', 't', 'p'];
+        $output->writeln(\sprintf('Peak Memory Usage: <comment>%s</comment>', \round($size / 1024 ** ($i = \floor(\log($size, 1024))), 2).$unit[$i]));
+
         return 0;
     }
 
@@ -135,45 +149,49 @@ EOT
     private function migrateMessages(OutputInterface $output)
     {
         $cursor = $this->messageCollection->find(
-            array('metadata' => array('$exists' => false)),
-            array(
+            ['metadata' => ['$exists' => false]],
+            [
                 'isReadByParticipant' => 1,
-                'isSpam' => 1,
-            )
+                'isSpam'              => 1,
+            ]
         );
         $cursor->snapshot();
 
         $numProcessed = 0;
 
-        if (!$numTotal = $cursor->count()) {
+        if ( ! $numTotal = $cursor->count())
+        {
             $output->writeln('There are no message documents to migrate.');
 
             return;
         }
 
-        $this->printStatusCallback = function () use ($output, &$numProcessed, $numTotal) {
-            $output->write(sprintf("Processed: <info>%d</info> / Complete: <info>%d%%</info>\r", $numProcessed, round(100 * ($numProcessed / $numTotal))));
+        $this->printStatusCallback = function () use ($output, &$numProcessed, $numTotal)
+        {
+            $output->write(\sprintf("Processed: <info>%d</info> / Complete: <info>%d%%</info>\r", $numProcessed, \round(100 * ($numProcessed / $numTotal))));
         };
 
-        declare(ticks=2500) {
-            foreach ($cursor as $message) {
+        declare(ticks = 2500)
+        {
+            foreach ($cursor as $message)
+            {
                 $this->createMessageMetadata($message);
                 $this->createMessageUnreadForParticipants($message);
 
                 $this->messageCollection->update(
-                    array('_id' => $message['_id']),
-                    array('$set' => array(
-                        'metadata' => $message['metadata'],
+                    ['_id' => $message['_id']],
+                    ['$set' => [
+                        'metadata'              => $message['metadata'],
                         'unreadForParticipants' => $message['unreadForParticipants'],
-                    )),
+                    ]],
                     $this->updateOptions
                 );
                 ++$numProcessed;
             }
         }
 
-        $output->write(str_repeat(' ', 28 + ceil(log10($numProcessed)))."\r");
-        $output->writeln(sprintf('Migrated <info>%d</info> message documents.', $numProcessed));
+        $output->write(\str_repeat(' ', 28 + \ceil(\log10($numProcessed)))."\r");
+        $output->writeln(\sprintf('Migrated <info>%d</info> message documents.', $numProcessed));
     }
 
     /**
@@ -182,52 +200,56 @@ EOT
     private function migrateThreads(OutputInterface $output)
     {
         $cursor = $this->threadCollection->find(
-            array('metadata' => array('$exists' => false)),
-            array(
+            ['metadata' => ['$exists' => false]],
+            [
                 'datesOfLastMessageWrittenByOtherParticipant' => 1,
-                'datesOfLastMessageWrittenByParticipant' => 1,
-                'isDeletedByParticipant' => 1,
-                'isSpam' => 1,
-                'messages' => 1,
-                'participants' => 1,
-            )
+                'datesOfLastMessageWrittenByParticipant'      => 1,
+                'isDeletedByParticipant'                      => 1,
+                'isSpam'                                      => 1,
+                'messages'                                    => 1,
+                'participants'                                => 1,
+            ]
         );
 
         $numProcessed = 0;
 
-        if (!$numTotal = $cursor->count()) {
+        if ( ! $numTotal = $cursor->count())
+        {
             $output->writeln('There are no thread documents to migrate.');
 
             return;
         }
 
-        $this->printStatusCallback = function () use ($output, &$numProcessed, $numTotal) {
-            $output->write(sprintf("Processed: <info>%d</info> / Complete: <info>%d%%</info>\r", $numProcessed, round(100 * ($numProcessed / $numTotal))));
+        $this->printStatusCallback = function () use ($output, &$numProcessed, $numTotal)
+        {
+            $output->write(\sprintf("Processed: <info>%d</info> / Complete: <info>%d%%</info>\r", $numProcessed, \round(100 * ($numProcessed / $numTotal))));
         };
 
-        declare(ticks=2500) {
-            foreach ($cursor as $thread) {
+        declare(ticks = 2500)
+        {
+            foreach ($cursor as $thread)
+            {
                 $this->createThreadMetadata($thread);
                 $this->createThreadLastMessageDate($thread);
                 $this->createThreadActiveParticipantArrays($thread);
 
                 $this->threadCollection->update(
-                    array('_id' => $thread['_id']),
-                    array('$set' => array(
+                    ['_id' => $thread['_id']],
+                    ['$set' => [
                         'activeParticipants' => $thread['activeParticipants'],
-                        'activeRecipients' => $thread['activeRecipients'],
-                        'activeSenders' => $thread['activeSenders'],
-                        'lastMessageDate' => $thread['lastMessageDate'],
-                        'metadata' => $thread['metadata'],
-                    )),
+                        'activeRecipients'   => $thread['activeRecipients'],
+                        'activeSenders'      => $thread['activeSenders'],
+                        'lastMessageDate'    => $thread['lastMessageDate'],
+                        'metadata'           => $thread['metadata'],
+                    ]],
                     $this->updateOptions
                 );
                 ++$numProcessed;
             }
         }
 
-        $output->write(str_repeat(' ', 28 + ceil(log10($numProcessed)))."\r");
-        $output->writeln(sprintf('Migrated <info>%d</info> thread documents.', $numProcessed));
+        $output->write(\str_repeat(' ', 28 + \ceil(\log10($numProcessed)))."\r");
+        $output->writeln(\sprintf('Migrated <info>%d</info> thread documents.', $numProcessed));
     }
 
     /**
@@ -238,13 +260,14 @@ EOT
      */
     private function createMessageMetadata(array &$message)
     {
-        $metadata = array();
+        $metadata = [];
 
-        foreach ($message['isReadByParticipant'] as $participantId => $isRead) {
-            $metadata[] = array(
-                'isRead' => $isRead,
-                'participant' => $this->participantCollection->createDBRef(array('_id' => new \MongoId($participantId))) + array('$db' => (string) $this->participantCollection->db),
-            );
+        foreach ($message['isReadByParticipant'] as $participantId => $isRead)
+        {
+            $metadata[] = [
+                'isRead'      => $isRead,
+                'participant' => $this->participantCollection->createDBRef(['_id' => new \MongoId($participantId)]) + ['$db' => (string) $this->participantCollection->db],
+            ];
         }
 
         $message['metadata'] = $metadata;
@@ -259,11 +282,14 @@ EOT
      */
     private function createMessageUnreadForParticipants(array &$message)
     {
-        $unreadForParticipants = array();
+        $unreadForParticipants = [];
 
-        if (!$message['isSpam']) {
-            foreach ($message['metadata'] as $metadata) {
-                if (!$metadata['isRead']) {
+        if ( ! $message['isSpam'])
+        {
+            foreach ($message['metadata'] as $metadata)
+            {
+                if ( ! $metadata['isRead'])
+                {
                     $unreadForParticipants[] = (string) $metadata['participant']['$id'];
                 }
             }
@@ -282,25 +308,29 @@ EOT
      */
     private function createThreadMetadata(array &$thread)
     {
-        $metadata = array();
+        $metadata = [];
 
-        $participantIds = array_keys($thread['datesOfLastMessageWrittenByOtherParticipant'] + $thread['datesOfLastMessageWrittenByParticipant'] + $thread['isDeletedByParticipant']);
+        $participantIds = \array_keys($thread['datesOfLastMessageWrittenByOtherParticipant'] + $thread['datesOfLastMessageWrittenByParticipant'] + $thread['isDeletedByParticipant']);
 
-        foreach ($participantIds as $participantId) {
-            $meta = array(
-                'isDeleted' => false,
-                'participant' => $this->participantCollection->createDBRef(array('_id' => new \MongoId($participantId))) + array('$db' => (string) $this->participantCollection->db),
-            );
+        foreach ($participantIds as $participantId)
+        {
+            $meta = [
+                'isDeleted'   => false,
+                'participant' => $this->participantCollection->createDBRef(['_id' => new \MongoId($participantId)]) + ['$db' => (string) $this->participantCollection->db],
+            ];
 
-            if (isset($thread['isDeletedByParticipant'][$participantId])) {
+            if (isset($thread['isDeletedByParticipant'][$participantId]))
+            {
                 $meta['isDeleted'] = $thread['isDeletedByParticipant'][$participantId];
             }
 
-            if (isset($thread['datesOfLastMessageWrittenByOtherParticipant'][$participantId])) {
+            if (isset($thread['datesOfLastMessageWrittenByOtherParticipant'][$participantId]))
+            {
                 $meta['lastMessageDate'] = new \MongoDate($thread['datesOfLastMessageWrittenByOtherParticipant'][$participantId]);
             }
 
-            if (isset($thread['datesOfLastMessageWrittenByParticipant'][$participantId])) {
+            if (isset($thread['datesOfLastMessageWrittenByParticipant'][$participantId]))
+            {
                 $meta['lastParticipantMessageDate'] = new \MongoDate($thread['datesOfLastMessageWrittenByParticipant'][$participantId]);
             }
 
@@ -317,13 +347,14 @@ EOT
      */
     private function createThreadLastMessageDate(array &$thread)
     {
-        $lastMessage = [];
-        $lastMessageRef = end($thread['messages']);
+        $lastMessage    = [];
+        $lastMessageRef = \end($thread['messages']);
 
-        if (false !== $lastMessageRef) {
+        if (false !== $lastMessageRef)
+        {
             $lastMessage = $this->messageCollection->findOne(
-                array('_id' => $lastMessageRef['$id']),
-                array('createdAt' => 1)
+                ['_id' => $lastMessageRef['$id']],
+                ['createdAt' => 1]
             );
         }
 
@@ -337,64 +368,76 @@ EOT
      */
     private function createThreadActiveParticipantArrays(array &$thread)
     {
-        $activeParticipants = array();
-        $activeRecipients = array();
-        $activeSenders = array();
+        $activeParticipants = [];
+        $activeRecipients   = [];
+        $activeSenders      = [];
 
-        foreach ($thread['participants'] as $participantRef) {
-            foreach ($thread['metadata'] as $metadata) {
-                if ($metadata['isDeleted'] && $metadata['participant']['$id'] === $participantRef['$id']) {
+        foreach ($thread['participants'] as $participantRef)
+        {
+            foreach ($thread['metadata'] as $metadata)
+            {
+                if ($metadata['isDeleted'] && $metadata['participant']['$id'] === $participantRef['$id'])
+                {
                     continue 2;
                 }
             }
 
             $participantIsActiveRecipient = $participantIsActiveSender = false;
 
-            foreach ($thread['messages'] as $messageRef) {
+            foreach ($thread['messages'] as $messageRef)
+            {
                 $message = $this->threadCollection->getDBRef($messageRef);
 
-                if (null === $message) {
-                    throw new \UnexpectedValueException(sprintf('Message "%s" not found for thread "%s"', $messageRef['$id'], $thread['_id']));
+                if (null === $message)
+                {
+                    throw new \UnexpectedValueException(\sprintf('Message "%s" not found for thread "%s"', $messageRef['$id'], $thread['_id']));
                 }
 
-                if (!isset($message['sender']['$id'])) {
-                    throw new \UnexpectedValueException(sprintf('Sender reference not found for message "%s"', $messageRef['$id']));
+                if ( ! isset($message['sender']['$id']))
+                {
+                    throw new \UnexpectedValueException(\sprintf('Sender reference not found for message "%s"', $messageRef['$id']));
                 }
 
-                if ($message['sender']['$id'] == $participantRef['$id']) {
+                if ($message['sender']['$id'] == $participantRef['$id'])
+                {
                     $participantIsActiveSender = true;
-                } elseif (!$thread['isSpam']) {
+                }
+                elseif ( ! $thread['isSpam'])
+                {
                     $participantIsActiveRecipient = true;
                 }
 
-                if ($participantIsActiveRecipient && $participantIsActiveSender) {
+                if ($participantIsActiveRecipient && $participantIsActiveSender)
+                {
                     break;
                 }
             }
 
-            if ($participantIsActiveSender) {
+            if ($participantIsActiveSender)
+            {
                 $activeSenders[] = (string) $participantRef['$id'];
             }
 
-            if ($participantIsActiveRecipient) {
+            if ($participantIsActiveRecipient)
+            {
                 $activeRecipients[] = (string) $participantRef['$id'];
             }
 
-            if ($participantIsActiveSender || $participantIsActiveRecipient) {
+            if ($participantIsActiveSender || $participantIsActiveRecipient)
+            {
                 $activeParticipants[] = (string) $participantRef['$id'];
             }
         }
 
         $thread['activeParticipants'] = $activeParticipants;
-        $thread['activeRecipients'] = $activeRecipients;
-        $thread['activeSenders'] = $activeSenders;
+        $thread['activeRecipients']   = $activeRecipients;
+        $thread['activeSenders']      = $activeSenders;
     }
 
     /**
      * Get the MongoCollection for the given class.
      *
-     * @param ManagerRegistry $registry
-     * @param string          $class
+     * @param string $class
      *
      * @throws \RuntimeException if the class has no DocumentManager
      *
@@ -402,21 +445,11 @@ EOT
      */
     private function getMongoCollectionForClass(ManagerRegistry $registry, $class)
     {
-        if (!$dm = $registry->getManagerForClass($class)) {
-            throw new \RuntimeException(sprintf('There is no DocumentManager for class "%s"', $class));
+        if ( ! $dm = $registry->getManagerForClass($class))
+        {
+            throw new \RuntimeException(\sprintf('There is no DocumentManager for class "%s"', $class));
         }
 
         return $dm->getDocumentCollection($class)->getMongoCollection();
-    }
-
-    /**
-     * Invokes the print status callback.
-     *
-     * Since unregister_tick_function() does not support anonymous functions, it
-     * is easier to register one method (this) and invoke a dynamic callback.
-     */
-    public function printStatus()
-    {
-        call_user_func($this->printStatusCallback);
     }
 }

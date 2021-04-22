@@ -41,8 +41,8 @@ class Reader implements ReaderInterface
     public function __construct(ParticipantProviderInterface $participantProvider, ReadableManagerInterface $readableManager, EventDispatcherInterface $dispatcher)
     {
         $this->participantProvider = $participantProvider;
-        $this->readableManager = $readableManager;
-        $this->dispatcher = $dispatcher;
+        $this->readableManager     = $readableManager;
+        $this->dispatcher          = $dispatcher;
     }
 
     /**
@@ -51,7 +51,8 @@ class Reader implements ReaderInterface
     public function markAsRead(ReadableInterface $readable)
     {
         $participant = $this->getAuthenticatedParticipant();
-        if ($readable->isReadByParticipant($participant)) {
+        if ($readable->isReadByParticipant($participant))
+        {
             return;
         }
         $this->readableManager->markAsReadByParticipant($readable, $participant);
@@ -65,7 +66,8 @@ class Reader implements ReaderInterface
     public function markAsUnread(ReadableInterface $readable)
     {
         $participant = $this->getAuthenticatedParticipant();
-        if (!$readable->isReadByParticipant($participant)) {
+        if ( ! $readable->isReadByParticipant($participant))
+        {
             return;
         }
         $this->readableManager->markAsUnreadByParticipant($readable, $participant);

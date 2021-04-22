@@ -73,8 +73,8 @@ abstract class Thread implements ThreadInterface
      */
     public function __construct()
     {
-        $this->messages = new ArrayCollection();
-        $this->metadata = new ArrayCollection();
+        $this->messages     = new ArrayCollection();
+        $this->metadata     = new ArrayCollection();
         $this->participants = new ArrayCollection();
     }
 
@@ -144,6 +144,7 @@ abstract class Thread implements ThreadInterface
 
     /**
      * @param bool
+     * @param mixed $isSpam
      */
     public function setIsSpam($isSpam)
     {
@@ -187,7 +188,8 @@ abstract class Thread implements ThreadInterface
      */
     public function isDeletedByParticipant(ParticipantInterface $participant)
     {
-        if ($meta = $this->getMetadataForParticipant($participant)) {
+        if ($meta = $this->getMetadataForParticipant($participant))
+        {
             return $meta->getIsDeleted();
         }
 
@@ -199,15 +201,18 @@ abstract class Thread implements ThreadInterface
      */
     public function setIsDeletedByParticipant(ParticipantInterface $participant, $isDeleted)
     {
-        if (!$meta = $this->getMetadataForParticipant($participant)) {
-            throw new \InvalidArgumentException(sprintf('No metadata exists for participant with id "%s"', $participant->getId()));
+        if ( ! $meta = $this->getMetadataForParticipant($participant))
+        {
+            throw new \InvalidArgumentException(\sprintf('No metadata exists for participant with id "%s"', $participant->getId()));
         }
 
         $meta->setIsDeleted($isDeleted);
 
-        if ($isDeleted) {
+        if ($isDeleted)
+        {
             // also mark all thread messages as read
-            foreach ($this->getMessages() as $message) {
+            foreach ($this->getMessages() as $message)
+            {
                 $message->setIsReadByParticipant($participant, true);
             }
         }
@@ -218,7 +223,8 @@ abstract class Thread implements ThreadInterface
      */
     public function setIsDeleted($isDeleted)
     {
-        foreach ($this->getParticipants() as $participant) {
+        foreach ($this->getParticipants() as $participant)
+        {
             $this->setIsDeletedByParticipant($participant, $isDeleted);
         }
     }
@@ -228,8 +234,10 @@ abstract class Thread implements ThreadInterface
      */
     public function isReadByParticipant(ParticipantInterface $participant)
     {
-        foreach ($this->getMessages() as $message) {
-            if (!$message->isReadByParticipant($participant)) {
+        foreach ($this->getMessages() as $message)
+        {
+            if ( ! $message->isReadByParticipant($participant))
+            {
                 return false;
             }
         }
@@ -242,7 +250,8 @@ abstract class Thread implements ThreadInterface
      */
     public function setIsReadByParticipant(ParticipantInterface $participant, $isRead)
     {
-        foreach ($this->getMessages() as $message) {
+        foreach ($this->getMessages() as $message)
+        {
             $message->setIsReadByParticipant($participant, $isRead);
         }
     }
@@ -258,18 +267,17 @@ abstract class Thread implements ThreadInterface
     /**
      * Gets the ThreadMetadata for a participant.
      *
-     *
      * @return ThreadMetadata
      */
     public function getMetadataForParticipant(ParticipantInterface $participant)
     {
-        foreach ($this->metadata as $meta) {
-            if ($meta->getParticipant()->getId() == $participant->getId()) {
+        foreach ($this->metadata as $meta)
+        {
+            if ($meta->getParticipant()->getId() == $participant->getId())
+            {
                 return $meta;
             }
         }
-
-        return null;
     }
 
     /**
@@ -279,13 +287,14 @@ abstract class Thread implements ThreadInterface
     {
         $otherParticipants = $this->getParticipants();
 
-        $key = array_search($participant, $otherParticipants, true);
+        $key = \array_search($participant, $otherParticipants, true);
 
-        if (false !== $key) {
+        if (false !== $key)
+        {
             unset($otherParticipants[$key]);
         }
 
         // we want to reset the array indexes
-        return array_values($otherParticipants);
+        return \array_values($otherParticipants);
     }
 }

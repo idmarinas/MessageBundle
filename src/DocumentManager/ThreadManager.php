@@ -47,16 +47,15 @@ class ThreadManager extends BaseThreadManager
     /**
      * Constructor.
      *
-     * @param DocumentManager $dm
-     * @param string          $class
-     * @param string          $metaClass
+     * @param string $class
+     * @param string $metaClass
      */
     public function __construct(DocumentManager $dm, $class, $metaClass, MessageManager $messageManager)
     {
-        $this->dm = $dm;
-        $this->repository = $dm->getRepository($class);
-        $this->class = $dm->getClassMetadata($class)->name;
-        $this->metaClass = $dm->getClassMetadata($metaClass)->name;
+        $this->dm             = $dm;
+        $this->repository     = $dm->getRepository($class);
+        $this->class          = $dm->getClassMetadata($class)->name;
+        $this->metaClass      = $dm->getClassMetadata($metaClass)->name;
         $this->messageManager = $messageManager;
     }
 
@@ -79,7 +78,8 @@ class ThreadManager extends BaseThreadManager
              * participant, as is done for ORM. This is not possible with the
              * current schema; compromise by sorting by last message date.
              */
-            ->sort('lastMessageDate', 'desc');
+            ->sort('lastMessageDate', 'desc')
+        ;
     }
 
     /**
@@ -101,7 +101,8 @@ class ThreadManager extends BaseThreadManager
              * participant, as is done for ORM. This is not possible with the
              * current schema; compromise by sorting by last message date.
              */
-            ->sort('lastMessageDate', 'desc');
+            ->sort('lastMessageDate', 'desc')
+        ;
     }
 
     /**
@@ -120,7 +121,8 @@ class ThreadManager extends BaseThreadManager
         return $this->repository->createQueryBuilder()
             ->field('metadata.isDeleted')->equals(true)
             ->field('metadata.participant.$id')->equals(new \MongoId($participant->getId()))
-            ->sort('lastMessageDate', 'desc');
+            ->sort('lastMessageDate', 'desc')
+        ;
     }
 
     /**
@@ -137,9 +139,9 @@ class ThreadManager extends BaseThreadManager
     public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search)
     {
         // remove all non-word chars
-        $search = preg_replace('/[^\w]/', ' ', trim($search));
+        $search = \preg_replace('/[^\w]/', ' ', \trim($search));
         // build a regex like (term1|term2)
-        $regex = sprintf('/(%s)/', implode('|', explode(' ', $search)));
+        $regex = \sprintf('/(%s)/', \implode('|', \explode(' ', $search)));
 
         return $this->repository->createQueryBuilder()
             ->field('activeParticipants')->equals($participant->getId())
@@ -149,7 +151,8 @@ class ThreadManager extends BaseThreadManager
              * participant, as is done for ORM. This is not possible with the
              * current schema; compromise by sorting by last message date.
              */
-            ->sort('lastMessageDate', 'desc');
+            ->sort('lastMessageDate', 'desc')
+        ;
     }
 
     /**
@@ -168,7 +171,8 @@ class ThreadManager extends BaseThreadManager
         return $this->repository->createQueryBuilder()
             ->field('createdBy.$id')->equals(new \MongoId($participant->getId()))
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -194,7 +198,8 @@ class ThreadManager extends BaseThreadManager
     {
         $this->denormalize($thread);
         $this->dm->persist($thread);
-        if ($andFlush) {
+        if ($andFlush)
+        {
             $this->dm->flush();
         }
     }
@@ -233,6 +238,7 @@ class ThreadManager extends BaseThreadManager
      *
      * All following methods are relative to denormalization
      */
+
     /**
      * Performs denormalization tricks.
      */
@@ -242,7 +248,8 @@ class ThreadManager extends BaseThreadManager
         $this->doEnsureThreadMetadataExists($thread);
         $thread->denormalize();
 
-        foreach ($thread->getMessages() as $message) {
+        foreach ($thread->getMessages() as $message)
+        {
             $this->messageManager->denormalize($message);
         }
     }
@@ -252,7 +259,8 @@ class ThreadManager extends BaseThreadManager
      */
     protected function doParticipants(Thread $thread)
     {
-        foreach ($thread->getMessages() as $message) {
+        foreach ($thread->getMessages() as $message)
+        {
             $thread->addParticipant($message->getSender());
         }
     }
@@ -263,8 +271,10 @@ class ThreadManager extends BaseThreadManager
      */
     protected function doEnsureThreadMetadataExists(Thread $thread)
     {
-        foreach ($thread->getParticipants() as $participant) {
-            if (!$meta = $thread->getMetadataForParticipant($participant)) {
+        foreach ($thread->getParticipants() as $participant)
+        {
+            if ( ! $meta = $thread->getMetadataForParticipant($participant))
+            {
                 $meta = $this->createThreadMetadata();
                 $meta->setParticipant($participant);
                 $thread->addMetadata($meta);

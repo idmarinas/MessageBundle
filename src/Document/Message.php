@@ -20,7 +20,7 @@ abstract class Message extends BaseMessage
      *
      * @var array of participant ID's
      */
-    protected $unreadForParticipants = array();
+    protected $unreadForParticipants = [];
 
     public function setIsSpam(bool $isSpam)
     {
@@ -55,14 +55,17 @@ abstract class Message extends BaseMessage
      */
     protected function doEnsureUnreadForParticipantsArray()
     {
-        $this->unreadForParticipants = array();
+        $this->unreadForParticipants = [];
 
-        if ($this->isSpam) {
+        if ($this->isSpam)
+        {
             return;
         }
 
-        foreach ($this->metadata as $metadata) {
-            if (!$metadata->getIsRead()) {
+        foreach ($this->metadata as $metadata)
+        {
+            if ( ! $metadata->getIsRead())
+            {
                 $this->unreadForParticipants[] = $metadata->getParticipant()->getId();
             }
         }

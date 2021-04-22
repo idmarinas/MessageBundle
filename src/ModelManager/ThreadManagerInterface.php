@@ -18,6 +18,8 @@ interface ThreadManagerInterface extends ReadableManagerInterface
     /**
      * Finds a thread by its ID.
      *
+     * @param mixed $id
+     *
      * @return ThreadInterface or null
      */
     public function findThreadById($id);
@@ -27,7 +29,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * containing at least one message not written by this participant,
      * ordered by last message not written by this participant in reverse order.
      * In one word: an inbox.
-     *
      *
      * @return Builder a query builder suitable for pagination
      */
@@ -39,7 +40,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * ordered by last message not written by this participant in reverse order.
      * In one word: an inbox.
      *
-     *
      * @return ThreadInterface[]
      */
     public function findParticipantInboxThreads(ParticipantInterface $participant);
@@ -49,7 +49,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * containing at least one message written by this participant,
      * ordered by last message written by this participant in reverse order.
      * In one word: an sentbox.
-     *
      *
      * @return Builder a query builder suitable for pagination
      */
@@ -61,7 +60,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * ordered by last message written by this participant in reverse order.
      * In one word: an sentbox.
      *
-     *
      * @return ThreadInterface[]
      */
     public function findParticipantSentThreads(ParticipantInterface $participant);
@@ -70,7 +68,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * Finds deleted threads from a participant,
      * ordered by last message date.
      *
-     *
      * @return Builder a query builder suitable for pagination
      */
     public function getParticipantDeletedThreadsQueryBuilder(ParticipantInterface $participant);
@@ -78,7 +75,6 @@ interface ThreadManagerInterface extends ReadableManagerInterface
     /**
      * Finds deleted threads from a participant,
      * ordered by last message date.
-     *
      *
      * @return ThreadInterface[]
      */
@@ -89,7 +85,8 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * matching the given search term
      * ordered by last message not written by this participant in reverse order.
      *
-     * @param string               $search
+     * @param string $search
+     *
      * @return Builder a query builder suitable for pagination
      */
     public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search);
@@ -99,14 +96,14 @@ interface ThreadManagerInterface extends ReadableManagerInterface
      * matching the given search term
      * ordered by last message not written by this participant in reverse order.
      *
-     * @param string               $search
+     * @param string $search
+     *
      * @return ThreadInterface[]
      */
     public function findParticipantThreadsBySearch(ParticipantInterface $participant, $search);
 
     /**
      * Gets threads created by a participant.
-     *
      *
      * @return ThreadInterface[]
      */
@@ -122,7 +119,7 @@ interface ThreadManagerInterface extends ReadableManagerInterface
     /**
      * Saves a thread.
      *
-     * @param bool            $andFlush Whether to flush the changes (default true)
+     * @param bool $andFlush Whether to flush the changes (default true)
      */
     public function saveThread(ThreadInterface $thread, $andFlush = true);
 

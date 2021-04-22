@@ -7,6 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Testfile for MessageExtension.
+ *
+ * @internal
+ * @coversNothing
  */
 class MessageExtensionTest extends TestCase
 {
@@ -19,10 +22,10 @@ class MessageExtensionTest extends TestCase
     public function setUp(): void
     {
         $this->participantProvider = $this->getMockBuilder('FOS\MessageBundle\Security\ParticipantProviderInterface')->getMock();
-        $this->provider = $this->getMockBuilder('FOS\MessageBundle\Provider\ProviderInterface')->getMock();
-        $this->authorizer = $this->getMockBuilder('FOS\MessageBundle\Security\AuthorizerInterface')->getMock();
-        $this->participant = $this->getMockBuilder('FOS\MessageBundle\Model\ParticipantInterface')->getMock();
-        $this->extension = new MessageExtension($this->participantProvider, $this->provider, $this->authorizer);
+        $this->provider            = $this->getMockBuilder('FOS\MessageBundle\Provider\ProviderInterface')->getMock();
+        $this->authorizer          = $this->getMockBuilder('FOS\MessageBundle\Security\AuthorizerInterface')->getMock();
+        $this->participant         = $this->getMockBuilder('FOS\MessageBundle\Model\ParticipantInterface')->getMock();
+        $this->extension           = new MessageExtension($this->participantProvider, $this->provider, $this->authorizer);
     }
 
     public function testIsReadReturnsTrueWhenRead()

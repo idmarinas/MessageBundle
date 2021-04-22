@@ -14,7 +14,7 @@ interface ReadableInterface
     /**
      * Sets whether or not this participant has read this.
      *
-     * @param bool                 $isRead
+     * @param bool $isRead
      */
     public function setIsReadByParticipant(ParticipantInterface $participant, $isRead);
 }

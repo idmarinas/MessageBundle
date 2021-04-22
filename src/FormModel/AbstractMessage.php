@@ -19,6 +19,7 @@ abstract class AbstractMessage
 
     /**
      * @param string
+     * @param mixed $body
      */
     public function setBody($body)
     {

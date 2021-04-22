@@ -48,15 +48,15 @@ class ThreadManager extends BaseThreadManager
     protected $messageManager;
 
     /**
-     * @param string         $class
-     * @param string         $metaClass
+     * @param string $class
+     * @param string $metaClass
      */
     public function __construct(EntityManager $em, $class, $metaClass, MessageManager $messageManager)
     {
-        $this->em = $em;
-        $this->repository = $em->getRepository($class);
-        $this->class = $em->getClassMetadata($class)->name;
-        $this->metaClass = $em->getClassMetadata($metaClass)->name;
+        $this->em             = $em;
+        $this->repository     = $em->getRepository($class);
+        $this->class          = $em->getClassMetadata($class)->name;
+        $this->metaClass      = $em->getClassMetadata($metaClass)->name;
         $this->messageManager = $messageManager;
     }
 
@@ -104,7 +104,8 @@ class ThreadManager extends BaseThreadManager
     {
         return $this->getParticipantInboxThreadsQueryBuilder($participant)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -143,7 +144,8 @@ class ThreadManager extends BaseThreadManager
     {
         return $this->getParticipantSentThreadsQueryBuilder($participant)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -175,7 +177,8 @@ class ThreadManager extends BaseThreadManager
     {
         return $this->getParticipantDeletedThreadsQueryBuilder($participant)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -184,10 +187,10 @@ class ThreadManager extends BaseThreadManager
     public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search)
     {
         // remove all non-word chars
-        $search = preg_replace('/[^\w]/', ' ', trim($search));
+        $search = \preg_replace('/[^\w]/', ' ', \trim($search));
         // build a regex like (term1|term2)
         /** @noRector \Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector */
-        $regex = sprintf('/(%s)/', implode('|', explode(' ', $search)));
+        $regex = \sprintf('/(%s)/', \implode('|', \explode(' ', $search)));
 
         throw new \Exception('not yet implemented');
     }
@@ -199,7 +202,8 @@ class ThreadManager extends BaseThreadManager
     {
         return $this->getParticipantThreadsBySearchQueryBuilder($participant, $search)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -214,7 +218,8 @@ class ThreadManager extends BaseThreadManager
             ->setParameter('participant_id', $participant->getId())
 
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -240,7 +245,8 @@ class ThreadManager extends BaseThreadManager
     {
         $this->denormalize($thread);
         $this->em->persist($thread);
-        if ($andFlush) {
+        if ($andFlush)
+        {
             $this->em->flush();
         }
     }
@@ -286,9 +292,11 @@ class ThreadManager extends BaseThreadManager
     protected function doMetadata(ThreadInterface $thread)
     {
         // Participants
-        foreach ($thread->getParticipants() as $participant) {
+        foreach ($thread->getParticipants() as $participant)
+        {
             $meta = $thread->getMetadataForParticipant($participant);
-            if (!$meta) {
+            if ( ! $meta)
+            {
                 $meta = $this->createThreadMetadata();
                 $meta->setParticipant($participant);
 
@@ -297,9 +305,11 @@ class ThreadManager extends BaseThreadManager
         }
 
         // Messages
-        foreach ($thread->getMessages() as $message) {
+        foreach ($thread->getMessages() as $message)
+        {
             $meta = $thread->getMetadataForParticipant($message->getSender());
-            if (!$meta) {
+            if ( ! $meta)
+            {
                 $meta = $this->createThreadMetadata();
                 $meta->setParticipant($message->getSender());
                 $thread->addMetadata($meta);
@@ -314,15 +324,18 @@ class ThreadManager extends BaseThreadManager
      */
     protected function doCreatedByAndAt(ThreadInterface $thread)
     {
-        if (!($message = $thread->getFirstMessage())) {
+        if ( ! ($message = $thread->getFirstMessage()))
+        {
             return;
         }
 
-        if (!$thread->getCreatedAt()) {
+        if ( ! $thread->getCreatedAt())
+        {
             $thread->setCreatedAt($message->getCreatedAt());
         }
 
-        if (!$thread->getCreatedBy()) {
+        if ( ! $thread->getCreatedBy())
+        {
             $thread->setCreatedBy($message->getSender());
         }
     }
@@ -332,16 +345,20 @@ class ThreadManager extends BaseThreadManager
      */
     protected function doDatesOfLastMessageWrittenByOtherParticipant(ThreadInterface $thread)
     {
-        foreach ($thread->getAllMetadata() as $meta) {
+        foreach ($thread->getAllMetadata() as $meta)
+        {
             $participantId = $meta->getParticipant()->getId();
-            $timestamp = 0;
+            $timestamp     = 0;
 
-            foreach ($thread->getMessages() as $message) {
-                if ($participantId != $message->getSender()->getId()) {
-                    $timestamp = max($timestamp, $message->getTimestamp());
+            foreach ($thread->getMessages() as $message)
+            {
+                if ($participantId != $message->getSender()->getId())
+                {
+                    $timestamp = \max($timestamp, $message->getTimestamp());
                 }
             }
-            if ($timestamp) {
+            if ($timestamp)
+            {
                 $date = new \DateTime();
                 $date->setTimestamp($timestamp);
                 $meta->setLastMessageDate($date);

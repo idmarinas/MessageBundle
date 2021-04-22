@@ -18,17 +18,18 @@ class ReplyMessageFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextareaType::class), array(
-                'label' => 'body',
+            ->add('body', LegacyFormHelper::getType(\Symfony\Component\Form\Extension\Core\Type\TextareaType::class), [
+                'label'              => 'body',
                 'translation_domain' => 'FOSMessageBundle',
-            ));
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'intention' => 'reply',
-        ));
+        ]);
     }
 
     /**

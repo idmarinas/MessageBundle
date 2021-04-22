@@ -58,7 +58,8 @@ class NewThreadMultipleMessage extends AbstractMessage
      */
     public function addRecipient(ParticipantInterface $recipient)
     {
-        if (!$this->recipients->contains($recipient)) {
+        if ( ! $this->recipients->contains($recipient))
+        {
             $this->recipients->add($recipient);
         }
     }

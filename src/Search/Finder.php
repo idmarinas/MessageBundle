@@ -30,7 +30,7 @@ class Finder implements FinderInterface
     public function __construct(ParticipantProviderInterface $participantProvider, ThreadManagerInterface $threadManager)
     {
         $this->participantProvider = $participantProvider;
-        $this->threadManager = $threadManager;
+        $this->threadManager       = $threadManager;
     }
 
     /**

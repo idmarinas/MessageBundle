@@ -22,8 +22,8 @@ class MessageExtension extends AbstractExtension
     public function __construct(ParticipantProviderInterface $participantProvider, ProviderInterface $provider, AuthorizerInterface $authorizer)
     {
         $this->participantProvider = $participantProvider;
-        $this->provider = $provider;
-        $this->authorizer = $authorizer;
+        $this->provider            = $provider;
+        $this->authorizer          = $authorizer;
     }
 
     /**
@@ -31,12 +31,12 @@ class MessageExtension extends AbstractExtension
      */
     public function getFunctions()
     {
-        return array(
-            new TwigFunction('fos_message_is_read', array($this, 'isRead')),
-            new TwigFunction('fos_message_nb_unread', array($this, 'getNbUnread')),
-            new TwigFunction('fos_message_can_delete_thread', array($this, 'canDeleteThread')),
-            new TwigFunction('fos_message_deleted_by_participant', array($this, 'isThreadDeletedByParticipant')),
-        );
+        return [
+            new TwigFunction('fos_message_is_read', [$this, 'isRead']),
+            new TwigFunction('fos_message_nb_unread', [$this, 'getNbUnread']),
+            new TwigFunction('fos_message_can_delete_thread', [$this, 'canDeleteThread']),
+            new TwigFunction('fos_message_deleted_by_participant', [$this, 'isThreadDeletedByParticipant']),
+        ];
     }
 
     /**
@@ -52,7 +52,6 @@ class MessageExtension extends AbstractExtension
     /**
      * Checks if the participant can mark a thread as deleted.
      *
-     *
      * @return bool true if participant can mark a thread as deleted, false otherwise
      */
     public function canDeleteThread(ThreadInterface $thread)
@@ -62,7 +61,6 @@ class MessageExtension extends AbstractExtension
 
     /**
      * Checks if the participant has marked the thread as deleted.
-     *
      *
      * @return bool true if participant has marked the thread as deleted, false otherwise
      */
@@ -78,11 +76,20 @@ class MessageExtension extends AbstractExtension
      */
     public function getNbUnread()
     {
-        if (null === $this->nbUnreadMessagesCache) {
+        if (null === $this->nbUnreadMessagesCache)
+        {
             $this->nbUnreadMessagesCache = $this->provider->getNbUnreadMessages();
         }
 
         return $this->nbUnreadMessagesCache;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'fos_message';
     }
 
     /**
@@ -93,13 +100,5 @@ class MessageExtension extends AbstractExtension
     protected function getAuthenticatedParticipant()
     {
         return $this->participantProvider->getAuthenticatedParticipant();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'fos_message';
     }
 }

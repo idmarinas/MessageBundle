@@ -31,7 +31,7 @@ abstract class Thread extends AbstractThread
      *
      * @var array of participant ID's
      */
-    protected $activeParticipants = array();
+    protected $activeParticipants = [];
 
     /**
      * The activeRecipients array will contain a participant's ID if the thread
@@ -40,7 +40,7 @@ abstract class Thread extends AbstractThread
      *
      * @var array of participant ID's
      */
-    protected $activeRecipients = array();
+    protected $activeRecipients = [];
 
     /**
      * The activeSenders array will contain a participant's ID if the thread is
@@ -49,7 +49,7 @@ abstract class Thread extends AbstractThread
      *
      * @var array of participant ID's
      */
-    protected $activeSenders = array();
+    protected $activeSenders = [];
 
     /**
      * Gets the users participating in this conversation.
@@ -67,14 +67,14 @@ abstract class Thread extends AbstractThread
      */
     public function addParticipant(ParticipantInterface $participant)
     {
-        if (!$this->isParticipant($participant)) {
+        if ( ! $this->isParticipant($participant))
+        {
             $this->participants->add($participant);
         }
     }
 
     /**
      * Tells if the user participates to the conversation.
-     *
      *
      * @return bool
      */
@@ -107,11 +107,13 @@ abstract class Thread extends AbstractThread
      */
     protected function doCreatedByAndAt()
     {
-        if (null !== $this->getCreatedBy()) {
+        if (null !== $this->getCreatedBy())
+        {
             return;
         }
 
-        if (!$message = $this->getFirstMessage()) {
+        if ( ! $message = $this->getFirstMessage())
+        {
             return;
         }
 
@@ -124,7 +126,8 @@ abstract class Thread extends AbstractThread
      */
     protected function doLastMessageDate()
     {
-        if (!$message = $this->getLastMessage()) {
+        if ( ! $message = $this->getLastMessage())
+        {
             return;
         }
 
@@ -138,12 +141,13 @@ abstract class Thread extends AbstractThread
     {
         $keywords = $this->getSubject();
 
-        foreach ($this->getMessages() as $message) {
+        foreach ($this->getMessages() as $message)
+        {
             $keywords .= ' '.$message->getBody();
         }
 
         // we only need each word once
-        $this->keywords = implode(' ', array_unique(str_word_count(mb_strtolower($keywords, 'UTF-8'), 1)));
+        $this->keywords = \implode(' ', \array_unique(\str_word_count(\mb_strtolower($keywords, 'UTF-8'), 1)));
     }
 
     /**
@@ -151,7 +155,8 @@ abstract class Thread extends AbstractThread
      */
     protected function doSpam()
     {
-        foreach ($this->getMessages() as $message) {
+        foreach ($this->getMessages() as $message)
+        {
             $message->setIsSpam($this->getIsSpam());
         }
     }
@@ -163,14 +168,21 @@ abstract class Thread extends AbstractThread
      */
     protected function doMetadataLastMessageDates()
     {
-        foreach ($this->metadata as $meta) {
-            foreach ($this->getMessages() as $message) {
-                if ($meta->getParticipant()->getId() !== $message->getSender()->getId()) {
-                    if (null === $meta->getLastMessageDate() || $meta->getLastMessageDate()->getTimestamp() < $message->getTimestamp()) {
+        foreach ($this->metadata as $meta)
+        {
+            foreach ($this->getMessages() as $message)
+            {
+                if ($meta->getParticipant()->getId() !== $message->getSender()->getId())
+                {
+                    if (null === $meta->getLastMessageDate() || $meta->getLastMessageDate()->getTimestamp() < $message->getTimestamp())
+                    {
                         $meta->setLastMessageDate($message->getCreatedAt());
                     }
-                } else {
-                    if (null === $meta->getLastParticipantMessageDate() || $meta->getLastParticipantMessageDate()->getTimestamp() < $message->getTimestamp()) {
+                }
+                else
+                {
+                    if (null === $meta->getLastParticipantMessageDate() || $meta->getLastParticipantMessageDate()->getTimestamp() < $message->getTimestamp())
+                    {
                         $meta->setLastParticipantMessageDate($message->getCreatedAt());
                     }
                 }
@@ -183,38 +195,48 @@ abstract class Thread extends AbstractThread
      */
     protected function doEnsureActiveParticipantArrays()
     {
-        $this->activeParticipants = array();
-        $this->activeRecipients = array();
-        $this->activeSenders = array();
+        $this->activeParticipants = [];
+        $this->activeRecipients   = [];
+        $this->activeSenders      = [];
 
-        foreach ($this->getParticipants() as $participant) {
-            if ($this->isDeletedByParticipant($participant)) {
+        foreach ($this->getParticipants() as $participant)
+        {
+            if ($this->isDeletedByParticipant($participant))
+            {
                 continue;
             }
 
             $participantIsActiveRecipient = $participantIsActiveSender = false;
 
-            foreach ($this->getMessages() as $message) {
-                if ($message->getSender()->getId() === $participant->getId()) {
+            foreach ($this->getMessages() as $message)
+            {
+                if ($message->getSender()->getId() === $participant->getId())
+                {
                     $participantIsActiveSender = true;
-                } elseif (!$this->getIsSpam()) {
+                }
+                elseif ( ! $this->getIsSpam())
+                {
                     $participantIsActiveRecipient = true;
                 }
 
-                if ($participantIsActiveRecipient && $participantIsActiveSender) {
+                if ($participantIsActiveRecipient && $participantIsActiveSender)
+                {
                     break;
                 }
             }
 
-            if ($participantIsActiveSender) {
+            if ($participantIsActiveSender)
+            {
                 $this->activeSenders[] = $participant->getId();
             }
 
-            if ($participantIsActiveRecipient) {
+            if ($participantIsActiveRecipient)
+            {
                 $this->activeRecipients[] = $participant->getId();
             }
 
-            if ($participantIsActiveSender || $participantIsActiveRecipient) {
+            if ($participantIsActiveSender || $participantIsActiveRecipient)
+            {
                 $this->activeParticipants[] = $participant->getId();
             }
         }

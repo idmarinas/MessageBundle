@@ -23,7 +23,7 @@ class User implements ParticipantInterface, UserInterface
 
     public function getRoles()
     {
-        return array();
+        return [];
     }
 
     public function eraseCredentials()

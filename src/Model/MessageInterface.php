@@ -38,6 +38,7 @@ interface MessageInterface extends ReadableInterface
 
     /**
      * @param  string
+     * @param mixed $body
      */
     public function setBody($body);
 

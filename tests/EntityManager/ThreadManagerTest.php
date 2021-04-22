@@ -29,7 +29,8 @@ class ThreadManagerTest extends TestCase
     {
         $thread = $this->createThreadMock();
         $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+            ->will($this->returnValue($this->createMessageMock()))
+        ;
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
@@ -45,10 +46,12 @@ class ThreadManagerTest extends TestCase
         $thread->expects($this->exactly(0))->method('setCreatedBy');
         $thread->expects($this->exactly(1))->method('setCreatedAt');
         $thread->expects($this->exactly(1))->method('getCreatedBy')
-            ->will($this->returnValue($this->user));
+            ->will($this->returnValue($this->user))
+        ;
 
         $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+            ->will($this->returnValue($this->createMessageMock()))
+        ;
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
@@ -64,10 +67,12 @@ class ThreadManagerTest extends TestCase
         $thread->expects($this->exactly(1))->method('setCreatedBy');
         $thread->expects($this->exactly(0))->method('setCreatedAt');
         $thread->expects($this->exactly(1))->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
+            ->will($this->returnValue($this->date))
+        ;
 
         $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+            ->will($this->returnValue($this->createMessageMock()))
+        ;
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
@@ -82,13 +87,16 @@ class ThreadManagerTest extends TestCase
         $thread->expects($this->exactly(0))->method('setCreatedBy');
         $thread->expects($this->exactly(0))->method('setCreatedAt');
         $thread->expects($this->exactly(1))->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
+            ->will($this->returnValue($this->date))
+        ;
 
         $thread->expects($this->exactly(1))->method('getCreatedBy')
-            ->will($this->returnValue($this->user));
+            ->will($this->returnValue($this->user))
+        ;
 
         $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+            ->will($this->returnValue($this->createMessageMock()))
+        ;
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
@@ -104,10 +112,12 @@ class ThreadManagerTest extends TestCase
         $thread->expects($this->exactly(0))->method('setCreatedAt');
         $thread->expects($this->exactly(0))
             ->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
+            ->will($this->returnValue($this->date))
+        ;
         $thread->expects($this->exactly(0))
             ->method('getCreatedBy')
-            ->will($this->returnValue($this->user));
+            ->will($this->returnValue($this->user))
+        ;
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
@@ -121,15 +131,18 @@ class ThreadManagerTest extends TestCase
     protected function createMessageMock()
     {
         $message = $this->getMockBuilder('FOS\MessageBundle\Document\Message')
-            ->getMock();
+            ->getMock()
+        ;
 
         $message->expects($this->any())
             ->method('getSender')
-            ->will($this->returnValue($this->user));
+            ->will($this->returnValue($this->user))
+        ;
 
         $message->expects($this->any())
             ->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
+            ->will($this->returnValue($this->date))
+        ;
 
         return $message;
     }
@@ -145,11 +158,13 @@ class ThreadManagerTest extends TestCase
     {
         $thread->expects($this->exactly($createdByCalls))
             ->method('setCreatedBy')
-            ->with($this->equalTo($this->user));
+            ->with($this->equalTo($this->user))
+        ;
 
         $thread->expects($this->exactly($createdAtCalls))
             ->method('setCreatedAt')
-            ->with($this->equalTo($this->date));
+            ->with($this->equalTo($this->date))
+        ;
     }
 
     /**
@@ -163,11 +178,13 @@ class ThreadManagerTest extends TestCase
     {
         $participant = $this->getMockBuilder('FOS\MessageBundle\Model\ParticipantInterface')
             ->disableOriginalConstructor(true)
-            ->getMock();
+            ->getMock()
+        ;
 
         $participant->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($id));
+            ->will($this->returnValue($id))
+        ;
 
         return $participant;
     }
@@ -181,7 +198,8 @@ class ThreadManagerTest extends TestCase
     {
         return $this->getMockBuilder('FOS\MessageBundle\Model\ThreadInterface')
             ->disableOriginalConstructor(true)
-            ->getMock();
+            ->getMock()
+        ;
     }
 }
 
@@ -196,8 +214,6 @@ class TestThreadManager extends ThreadManager
 
     /**
      * Make the function public.
-     *
-     * @param ThreadInterface $thread
      */
     public function doCreatedByAndAt(ThreadInterface $thread)
     {
